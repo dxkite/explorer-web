@@ -49,11 +49,13 @@ export default class SearchInput extends Vue {
     this.input.value = ''
     nextTick(() => {
       this.input.focus()
+      this.$emit('open')
     })
   }
 
   private onClickSearchClose () {
     this.inputFocus = false
+    this.$emit('close')
   }
 
   private onInput () {
@@ -65,6 +67,8 @@ export default class SearchInput extends Vue {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
   .file-search-box {
+    padding: 8px;
+
     &.is-focus {
       .search-button {
         display: none;
