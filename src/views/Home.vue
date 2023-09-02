@@ -6,7 +6,8 @@
     <div class="content-view">
       <div class="content-title">{{ showPath }}</div>
       <div class="content-body">
-        <MarkdownView class="markdown-view" v-if="showMarkdown" :path="showPath"/>
+        <MarkdownView class="markdown-view content-item" v-if="showMarkdown" :path="showPath"/>
+        <MetaView class="content-item" v-if="currentMeta" :meta="currentMeta"/>
       </div>
     </div>
   </div>
@@ -18,16 +19,18 @@ import { Component, Vue } from 'vue-property-decorator'
 import FileList from '@/components/FileList.vue' // @ is an alias to /src
 import { decodeUrlSafeBase64, encodeUrlSafeBase64 } from '@/src/util'
 import MarkdownView from '@/components/MarkdownView.vue'
-import { getFileMeta, Tag, WebsiteConfig } from '@/src/api'
+import { FileMeta, getFileMeta, Tag, WebsiteConfig } from '@/src/api'
 import Footer from '@/components/Footer.vue'
 import Panel from '@/components/Panel.vue'
+import MetaView from '@/components/MetaView.vue'
 
 @Component({
   components: {
     FileList,
     MarkdownView,
     Footer,
-    Panel
+    Panel,
+    MetaView
   }
 })
 export default class Home extends Vue {
@@ -37,6 +40,8 @@ export default class Home extends Vue {
   private showMarkdown = false
   private showMarkdownPath = ''
   private currentTag = ''
+  private currentMeta: FileMeta | null = null
+
   private config: WebsiteConfig = {
     name: 'dxkite的网站',
     copyrightName: 'dxkite',
@@ -74,6 +79,7 @@ export default class Home extends Vue {
     this.detailLoaded = false
     this.showMarkdown = false
     const meta = await getFileMeta(path)
+    this.currentMeta = meta
     if (meta.path.toLowerCase().endsWith('.md')) {
       this.showPath = meta.path
       this.showMarkdownContent(this.showPath)
@@ -142,6 +148,10 @@ export default class Home extends Vue {
     .markdown-view {
       padding: 24px;
       background-color: #ffffff;
+    }
+
+    .content-item+.content-item {
+      margin-top: 16px;
     }
   }
 </style>
