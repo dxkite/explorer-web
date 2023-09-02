@@ -6,7 +6,8 @@ export interface FileMeta {
   name: string
   path: string
   isDir: boolean
-  children: FileMeta[]
+  readme?: string
+  children?: FileMeta[]
 }
 
 export const getFileMeta = (path: string): Promise<FileMeta> => {

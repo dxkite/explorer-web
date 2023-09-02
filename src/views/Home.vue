@@ -4,7 +4,7 @@
     <div class="content-view">
       <div class="content-title">{{ showPath }}</div>
       <div class="content-body">
-        <MarkdownView class="markdown-view" v-if="isMarkdown" :path="showPath"/>
+        <MarkdownView class="markdown-view" v-if="showMarkdown" :path="showPath"/>
       </div>
     </div>
   </div>
@@ -15,6 +15,7 @@ import { Component, Vue } from 'vue-property-decorator'
 import FileList from '@/components/FileList.vue' // @ is an alias to /src
 import { decodeUrlSafeBase64, encodeUrlSafeBase64 } from '@/src/util'
 import MarkdownView from '@/components/MarkdownView.vue'
+import { getFileMeta } from '@/src/api'
 
 @Component({
   components: {
@@ -25,6 +26,9 @@ import MarkdownView from '@/components/MarkdownView.vue'
 export default class Home extends Vue {
   private currentPath = ''
   private showPath = ''
+  private detailLoaded = false
+  private showMarkdown = false
+  private showMarkdownPath = ''
 
   public mounted () {
     if (this.$route.params.path.length > 0) {
@@ -33,14 +37,15 @@ export default class Home extends Vue {
       this.currentPath = '/'
     }
     this.showPath = this.currentPath
+    this.showDetail(this.showPath)
   }
 
   public onClickFile (path: string) {
     if (this.showPath === path) {
       return
     }
-
     this.showPath = path
+    this.showDetail(this.showPath)
     this.$router.push({
       name: 'Path',
       params: {
@@ -49,8 +54,23 @@ export default class Home extends Vue {
     })
   }
 
-  get isMarkdown () {
-    return this.showPath.toLowerCase().endsWith('.md')
+  private async showDetail (path: string) {
+    this.detailLoaded = false
+    this.showMarkdown = false
+    const meta = await getFileMeta(path)
+    if (meta.path.toLowerCase().endsWith('.md')) {
+      this.showPath = meta.path
+      this.showMarkdownContent(this.showPath)
+    } else if (meta.readme && meta.readme.length > 0) {
+      this.showPath = meta.readme
+      this.showMarkdownContent(this.showPath)
+    }
+    this.detailLoaded = true
+  }
+
+  private showMarkdownContent (path: string) {
+    this.showMarkdown = true
+    this.showMarkdownPath = path
   }
 }
 </script>
