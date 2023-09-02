@@ -4,7 +4,7 @@
       <div class="website-logo"><img src="@/assets/dxkite.png"/></div>
       <div class="website-name">dxkite的个人网站</div>
     </div>
-    <div class="tag-panel">
+    <div class="tag-panel" v-if="showTag">
       <div class="tag-title">标签</div>
       <div class="tag-list">
         <div class="tag-item" v-for="item in tagList" :key="item.name" @click="onClickTag(item)">
@@ -27,6 +27,10 @@ import Tag from './Tag.vue'
 })
 export default class Panel extends Vue {
   public tagList: TagItem[] = []
+
+  get showTag () {
+    return this.tagList.length > 0
+  }
 
   private mounted () {
     this.initTag()
