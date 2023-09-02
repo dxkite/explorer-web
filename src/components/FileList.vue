@@ -149,7 +149,7 @@ export default class FileList extends Vue {
     }
 
     &::-webkit-scrollbar-track {
-      background-color: fcfcfc;
+      background-color: #fcfcfc;
     }
 
     &::-webkit-scrollbar-thumb {
