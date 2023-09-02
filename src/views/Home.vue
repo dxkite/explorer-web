@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <FileList class="file-list" :path="currentPath" @click="onClickFile"/>
+    <FileList :path="currentPath"  class="file-list" @click="onClickFile"/>
     <div class="content-view">
       <div class="content-title">{{ showPath }}</div>
       <div class="content-body">
@@ -9,7 +9,6 @@
     </div>
   </div>
 </template>
-
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import FileList from '@/components/FileList.vue' // @ is an alias to /src
@@ -78,6 +77,12 @@ export default class Home extends Vue {
 <style lang="scss" scoped>
   .container {
     display: flex;
+
+    .file-list {
+      height: 100vh;
+      width: 300px;
+    }
+
     .content-view {
       flex-grow: 1;
       height: 100vh;
