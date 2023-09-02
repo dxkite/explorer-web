@@ -15,6 +15,15 @@ export interface Tag {
   count: number
 }
 
+export interface WebsiteConfig {
+  name: string
+  copyrightName: string
+  websiteRecord: string
+  websiteRecordLink: string
+  websitePoliceRecord: string
+  websitePoliceLink: string
+}
+
 export const getTagList = (): Promise<Tag[]> => {
   return axios.get(API.tags).then((val) => toCamel(val.data))
 }

@@ -1,7 +1,7 @@
 <template>
 <div class="main">
   <div class="container">
-    <Panel @tagClick="onClickTag" />
+    <Panel @tagClick="onClickTag" :config="config"/>
     <FileList :path="currentPath" :tag="currentTag" class="file-list" @click="onClickFile" @clearTag="onClearTag"/>
     <div class="content-view">
       <div class="content-title">{{ showPath }}</div>
@@ -10,7 +10,7 @@
       </div>
     </div>
   </div>
-  <Footer/>
+  <Footer :config="config"/>
 </div>
 </template>
 <script lang="ts">
@@ -18,7 +18,7 @@ import { Component, Vue } from 'vue-property-decorator'
 import FileList from '@/components/FileList.vue' // @ is an alias to /src
 import { decodeUrlSafeBase64, encodeUrlSafeBase64 } from '@/src/util'
 import MarkdownView from '@/components/MarkdownView.vue'
-import { getFileMeta, Tag } from '@/src/api'
+import { getFileMeta, Tag, WebsiteConfig } from '@/src/api'
 import Footer from '@/components/Footer.vue'
 import Panel from '@/components/Panel.vue'
 
@@ -37,6 +37,14 @@ export default class Home extends Vue {
   private showMarkdown = false
   private showMarkdownPath = ''
   private currentTag = ''
+  private config: WebsiteConfig = {
+    name: 'dxkite的网站',
+    copyrightName: 'dxkite',
+    websiteRecord: '湘ICP备20002416号-1',
+    websiteRecordLink: 'https://beian.miit.gov.cn/',
+    websitePoliceRecord: '湘公网安备 43112602000222号',
+    websitePoliceLink: 'http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=43112602000222'
+  }
 
   public mounted () {
     if (this.$route.params.path.length > 0) {

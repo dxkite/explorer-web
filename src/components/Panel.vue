@@ -2,7 +2,7 @@
   <div class="panel">
     <div class="website-info">
       <div class="website-logo"><img src="@/assets/dxkite.png"/></div>
-      <div class="website-name">dxkite的个人网站</div>
+      <div class="website-name">{{ config.name }}</div>
     </div>
     <div class="tag-panel" v-if="showTag">
       <div class="tag-title">标签</div>
@@ -16,8 +16,8 @@
 </template>
 
 <script lang="ts">
-import { getTagList, Tag as TagItem } from '@/src/api'
-import { Component, Vue } from 'vue-property-decorator'
+import { getTagList, Tag as TagItem, WebsiteConfig } from '@/src/api'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 import Tag from './Tag.vue'
 
 @Component({
@@ -26,6 +26,9 @@ import Tag from './Tag.vue'
   }
 })
 export default class Panel extends Vue {
+  @Prop()
+  private config!: WebsiteConfig
+
   public tagList: TagItem[] = []
 
   get showTag () {

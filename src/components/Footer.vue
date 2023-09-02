@@ -1,20 +1,21 @@
 <template>
     <div class="footer">
-      <div class="footer-item copyright">&copy; {{ new Date().getFullYear() }} dxkite </div>
-      <a class="footer-item website-record" href="https://beian.miit.gov.cn/" target="_blank">
-        湘ICP备20002416号-1
-      </a>
-      <a class="footer-item police-record" target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=43112602000222">
-        <img class="icon" src="@/assets/police.png"/><div>湘公网安备 43112602000222号</div>
+      <div v-if="config.copyrightName.length > 0" class="footer-item copyright">&copy; {{ new Date().getFullYear() }} {{config.copyrightName}} </div>
+      <a v-if="config.websiteRecordLink.length > 0" class="footer-item website-record" :href="config.websiteRecordLink" target="_blank">{{ config.websiteRecord }}</a>
+      <a v-if="config.websitePoliceLink.length > 0" class="footer-item police-record" target="_blank" :href="config.websitePoliceLink">
+        <img class="icon" src="@/assets/police.png"/><div>{{config.websitePoliceRecord}}</div>
       </a>
     </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { WebsiteConfig } from '@/src/api'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 
 @Component
 export default class Footer extends Vue {
+  @Prop()
+  private config!: WebsiteConfig
 }
 </script>
 
