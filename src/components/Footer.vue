@@ -5,7 +5,7 @@
         湘ICP备20002416号-1
       </a>
       <a class="footer-item police-record" target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=43112602000222">
-        <img class="icon" src="./../assets/police.png"/><div>湘公网安备 43112602000222号</div>
+        <img class="icon" src="@/assets/police.png"/><div>湘公网安备 43112602000222号</div>
       </a>
     </div>
 </template>
