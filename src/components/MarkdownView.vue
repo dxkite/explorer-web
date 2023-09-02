@@ -6,6 +6,7 @@
 import { getFileRawText } from '@/src/api'
 import { Component, Prop, Ref, Vue, Watch } from 'vue-property-decorator'
 import 'markdown-it-vue/dist/markdown-it-vue.css'
+import { replaceMarkdownLink } from '@/src/util'
 
 @Component
 export default class MarkdownView extends Vue {
@@ -49,7 +50,7 @@ export default class MarkdownView extends Vue {
   @Watch('path')
   private async loadPath () {
     const raw = await getFileRawText(this.path)
-    this.content = raw
+    this.content = replaceMarkdownLink(raw)
   }
 }
 </script>
