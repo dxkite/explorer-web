@@ -1,5 +1,11 @@
 <template>
   <div class="file-explorer">
+    <div class="tag-filter" v-if="hasTag">
+      <div class="tag-name">{{ tag }}</div>
+      <div class="tag-close" @click="onClickTagClose">
+        <img src="@/assets/close.svg"/>
+      </div>
+    </div>
     <SearchInput class="file-search" v-model="searchText" @open="onSearchStart" @close="onSearchStop" />
     <div  class="file-list">
       <div v-if="isLoaded">
@@ -24,9 +30,12 @@ import { hasPreviousPath, getDirName } from '@/src/util'
 })
 export default class FileList extends Vue {
   @Prop() public path!: string
+  @Prop() public tag!: string
 
   public searchText = ''
-  public searchEnable = false
+  public searchTag = ''
+  public isSearchText = false
+  public isSearchTag = false
   public searchList: FileMeta[] = []
 
   public isLoaded = false
@@ -36,27 +45,40 @@ export default class FileList extends Vue {
 
   public currentPath = ''
 
+  get hasTag () {
+    return this.searchTag.length > 0
+  }
+
   get hasPrevious () {
     return hasPreviousPath(this.currentDir?.path || '')
   }
 
   public mounted () {
-    this.init()
+    this.initTag()
+    this.initPath()
   }
 
   get fileList () {
     console.log('currentDir', this.currentDir)
-    if (this.searchEnable) {
+    if (this.isSearchTag || this.isSearchText) {
       return this.searchList
     }
     return this.currentDir?.children || []
   }
 
   @Watch('path')
-  public init () {
+  public initPath () {
     this.currentPath = this.path || '/'
     console.log('init', [this.currentPath, this.path])
     this.loadPath(this.currentPath)
+  }
+
+  @Watch('tag')
+  public initTag () {
+    this.searchTag = this.tag || ''
+    if (this.searchTag.length > 0) {
+      this.isSearchTag = true
+    }
   }
 
   private async loadPath (path: string) {
@@ -102,27 +124,36 @@ export default class FileList extends Vue {
   }
 
   @Watch('searchText')
+  @Watch('searchTag')
   private onSearch () {
-    if (this.searchEnable && this.searchText.length > 0) {
-      this.handleSearch(this.searchText)
+    const isEnableSearch = this.isSearchText && this.searchText.length > 0
+    const isEnableTagSearch = this.searchTag.length > 0
+    if (isEnableSearch || isEnableTagSearch) {
+      this.handleSearch(this.searchText, this.searchTag)
     }
   }
 
-  private async handleSearch (text: string) {
+  private async handleSearch (text: string, tag: string) {
     this.isLoaded = false
     console.log('searching...', text)
-    const current = await searchFileMeta(text)
+    const current = await searchFileMeta(text, tag)
     this.searchList = current
     console.log('search finish', text, current)
     this.isLoaded = true
   }
 
   private onSearchStart () {
-    this.searchEnable = true
+    this.isSearchText = true
   }
 
   private onSearchStop () {
-    this.searchEnable = false
+    this.isSearchText = false
+  }
+
+  private onClickTagClose () {
+    this.searchTag = ''
+    this.isSearchTag = false
+    this.$emit('clearTag')
   }
 }
 </script>
@@ -134,6 +165,26 @@ export default class FileList extends Vue {
   height: 100%;
   display: flex;
   flex-direction: column;
+
+  .tag-filter {
+    padding: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .tag-name {
+      line-height: 24px;
+    }
+
+    .tag-close {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 24px;
+      width: 24px;
+      padding: 8px;
+    }
+  }
 
   .file-search {
   }

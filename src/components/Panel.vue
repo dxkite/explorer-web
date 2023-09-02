@@ -7,7 +7,7 @@
     <div class="tag-panel">
       <div class="tag-title">标签</div>
       <div class="tag-list">
-        <div class="tag-item" v-for="item in tagList" :key="item.name">
+        <div class="tag-item" v-for="item in tagList" :key="item.name" @click="onClickTag(item)">
           <Tag :name="item.name" />
         </div>
       </div>
@@ -30,6 +30,10 @@ export default class Panel extends Vue {
 
   private mounted () {
     this.initTag()
+  }
+
+  private onClickTag (tag: TagItem) {
+    this.$emit('tagClick', tag)
   }
 
   private async initTag () {
@@ -80,6 +84,7 @@ export default class Panel extends Vue {
       .tag-item {
         padding-left: 4px;
         padding-bottom: 4px;
+        cursor: pointer;
       }
     }
   }

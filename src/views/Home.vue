@@ -1,8 +1,8 @@
 <template>
 <div class="main">
   <div class="container">
-    <Panel/>
-    <FileList :path="currentPath" class="file-list" @click="onClickFile"/>
+    <Panel @tagClick="onClickTag" />
+    <FileList :path="currentPath" :tag="currentTag" class="file-list" @click="onClickFile" @clearTag="onClearTag"/>
     <div class="content-view">
       <div class="content-title">{{ showPath }}</div>
       <div class="content-body">
@@ -18,7 +18,7 @@ import { Component, Vue } from 'vue-property-decorator'
 import FileList from '@/components/FileList.vue' // @ is an alias to /src
 import { decodeUrlSafeBase64, encodeUrlSafeBase64 } from '@/src/util'
 import MarkdownView from '@/components/MarkdownView.vue'
-import { getFileMeta } from '@/src/api'
+import { getFileMeta, Tag } from '@/src/api'
 import Footer from '@/components/Footer.vue'
 import Panel from '@/components/Panel.vue'
 
@@ -36,6 +36,7 @@ export default class Home extends Vue {
   private detailLoaded = false
   private showMarkdown = false
   private showMarkdownPath = ''
+  private currentTag = ''
 
   public mounted () {
     if (this.$route.params.path.length > 0) {
@@ -78,6 +79,14 @@ export default class Home extends Vue {
   private showMarkdownContent (path: string) {
     this.showMarkdown = true
     this.showMarkdownPath = path
+  }
+
+  private onClickTag (tag: Tag) {
+    this.currentTag = tag.name
+  }
+
+  private onClearTag () {
+    this.currentTag = ''
   }
 }
 </script>
