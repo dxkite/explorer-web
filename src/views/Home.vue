@@ -1,4 +1,5 @@
 <template>
+<div class="main">
   <div class="container">
     <FileList :path="currentPath"  class="file-list" @click="onClickFile"/>
     <div class="content-view">
@@ -8,6 +9,8 @@
       </div>
     </div>
   </div>
+  <Footer/>
+</div>
 </template>
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
@@ -15,11 +18,13 @@ import FileList from '@/components/FileList.vue' // @ is an alias to /src
 import { decodeUrlSafeBase64, encodeUrlSafeBase64 } from '@/src/util'
 import MarkdownView from '@/components/MarkdownView.vue'
 import { getFileMeta } from '@/src/api'
+import Footer from '@/components/Footer.vue'
 
 @Component({
   components: {
     FileList,
-    MarkdownView
+    MarkdownView,
+    Footer
   }
 })
 export default class Home extends Vue {
@@ -77,15 +82,14 @@ export default class Home extends Vue {
 <style lang="scss" scoped>
   .container {
     display: flex;
+    height: calc(100vh - 36px);
 
     .file-list {
-      height: 100vh;
       width: 300px;
     }
 
     .content-view {
       flex-grow: 1;
-      height: 100vh;
       display: flex;
       flex-direction: column;
       width: 60%;
