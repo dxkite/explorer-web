@@ -1,7 +1,8 @@
 <template>
 <div class="main">
   <div class="container">
-    <FileList :path="currentPath"  class="file-list" @click="onClickFile"/>
+    <Panel/>
+    <FileList :path="currentPath" class="file-list" @click="onClickFile"/>
     <div class="content-view">
       <div class="content-title">{{ showPath }}</div>
       <div class="content-body">
@@ -19,12 +20,14 @@ import { decodeUrlSafeBase64, encodeUrlSafeBase64 } from '@/src/util'
 import MarkdownView from '@/components/MarkdownView.vue'
 import { getFileMeta } from '@/src/api'
 import Footer from '@/components/Footer.vue'
+import Panel from '@/components/Panel.vue'
 
 @Component({
   components: {
     FileList,
     MarkdownView,
-    Footer
+    Footer,
+    Panel
   }
 })
 export default class Home extends Vue {

@@ -10,6 +10,15 @@ export interface FileMeta {
   children?: FileMeta[]
 }
 
+export interface Tag {
+  name: string
+  count: number
+}
+
+export const getTagList = (): Promise<Tag[]> => {
+  return axios.get(API.tags).then((val) => toCamel(val.data))
+}
+
 export const getFileMeta = (path: string): Promise<FileMeta> => {
   return axios.get(API.meta + path).then((val) => toCamel(val.data))
 }
