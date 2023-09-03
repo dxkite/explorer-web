@@ -59,15 +59,8 @@ export default class Home extends Vue {
   }
 
   public mounted () {
-    const path = this.$route.params.path || ''
-    const tag = this.$route.query.tag as string || ''
-    const search = this.$route.query.search as string || ''
-    console.log('mounted', { path, tag, search })
-    if (path.length > 0) {
-      this.currentPath = decodeUrlSafeBase64(path)
-    } else {
-      this.currentPath = '/'
-    }
+    const { path, search, tag } = this.getCurrentRoute()
+    this.currentPath = path || '/'
     this.currentTag = tag
     this.currentSearch = search
     this.showDetail(this.currentPath)
@@ -115,7 +108,38 @@ export default class Home extends Vue {
   @Watch('currentPath')
   @Watch('currentTag')
   @Watch('currentSearch')
-  private updateRoute () {
+  private handleRouteUpdate () {
+    if (!this.isRouteChange) {
+      return
+    }
+    this.pushRoute()
+  }
+
+  get isRouteChange () {
+    const { path, search, tag } = this.getCurrentRoute()
+    if (path !== this.currentPath) {
+      return true
+    }
+    if (search !== this.currentSearch) {
+      return true
+    }
+    if (tag !== this.currentTag) {
+      return true
+    }
+    return false
+  }
+
+  private getCurrentRoute () {
+    let path = this.$route.params.path || ''
+    if (path) {
+      path = decodeUrlSafeBase64(path)
+    }
+    const tag = this.$route.query.tag as string || ''
+    const search = this.$route.query.search as string || ''
+    return { path, tag, search }
+  }
+
+  private pushRoute () {
     const location: RawLocation = {
       name: 'Path',
       params: {
