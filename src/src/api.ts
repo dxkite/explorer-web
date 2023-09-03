@@ -41,6 +41,6 @@ export const getFileRawLink = async (path: string): Promise<string> => {
   return `${API.raw}/${path}`
 }
 
-export const searchFileMeta = (name: string, tag: string): Promise<FileMeta[]> => {
-  return axios.get(API.search, { params: { name, tag, offset: 0, limit: 100 } }).then((val) => toCamel(val.data))
+export const searchFileMeta = (path: string, name: string, tag: string): Promise<FileMeta[]> => {
+  return axios.get(API.search, { params: { path, name, tag, offset: 0, limit: 100 } }).then((val) => toCamel(val.data))
 }

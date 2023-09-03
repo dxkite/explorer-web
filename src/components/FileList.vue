@@ -136,15 +136,16 @@ export default class FileList extends Vue {
   private onSearch () {
     const isEnableSearch = this.isSearchText && this.searchText.length > 0
     const isEnableTagSearch = this.searchTag.length > 0
+    const currentDir = this.currentDir?.path || '/'
     if (isEnableSearch || isEnableTagSearch) {
-      this.handleSearch(this.searchText, this.searchTag)
+      this.handleSearch(currentDir, this.searchText, this.searchTag)
     }
   }
 
-  private async handleSearch (text: string, tag: string) {
+  private async handleSearch (path: string, text: string, tag: string) {
     this.isLoaded = false
     console.log('searching...', text)
-    const current = await searchFileMeta(text, tag)
+    const current = await searchFileMeta(path, text, tag)
     this.searchList = current
     console.log('search finish', text, current)
     this.isLoaded = true
