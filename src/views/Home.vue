@@ -5,10 +5,10 @@
     <FileList :path="currentPath" :tag="currentTag" class="file-list" @click="onClickFile" @clearTag="onClearTag"/>
     <div class="content-view">
       <div class="content-title">
-        <PathView :path="showPath" @click="onClickFile"/>
+        <PathView :path="currentPath" @click="onClickFile"/>
       </div>
       <div class="content-body">
-        <MarkdownView class="markdown-view content-item" v-if="showMarkdown" :path="showPath"/>
+        <MarkdownView class="markdown-view content-item" v-if="showMarkdown" :path="currentPath"/>
         <MetaView class="content-item" v-if="currentMeta" :meta="currentMeta"/>
       </div>
     </div>
@@ -39,7 +39,6 @@ import PathView from '@/components/PathView.vue'
 })
 export default class Home extends Vue {
   private currentPath = ''
-  private showPath = ''
   private detailLoaded = false
   private showMarkdown = false
   private showMarkdownPath = ''
@@ -62,16 +61,15 @@ export default class Home extends Vue {
     } else {
       this.currentPath = '/'
     }
-    this.showPath = this.currentPath
-    this.showDetail(this.showPath)
+    this.showDetail(this.currentPath)
   }
 
   public onClickFile (path: string) {
-    if (this.showPath === path) {
+    if (this.currentPath === path) {
       return
     }
-    this.showPath = path
-    this.showDetail(this.showPath)
+    this.currentPath = path
+    this.showDetail(this.currentPath)
     this.$router.push({
       name: 'Path',
       params: {
@@ -93,11 +91,11 @@ export default class Home extends Vue {
     }
     this.currentMeta = meta
     if (meta.path.toLowerCase().endsWith('.md')) {
-      this.showPath = meta.path
-      this.showMarkdownContent(this.showPath)
+      this.currentPath = meta.path
+      this.showMarkdownContent(this.currentPath)
     } else if (meta.readme && meta.readme.length > 0) {
-      this.showPath = meta.readme
-      this.showMarkdownContent(this.showPath)
+      this.currentPath = meta.readme
+      this.showMarkdownContent(this.currentPath)
     }
     this.detailLoaded = true
   }

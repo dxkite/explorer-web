@@ -76,6 +76,9 @@ export default class FileList extends Vue {
 
   @Watch('path')
   public initPath () {
+    if (this.path === this.currentPath) {
+      return
+    }
     this.currentPath = this.path || '/'
     console.log('init', [this.currentPath, this.path])
     this.loadPath(this.currentPath)
