@@ -158,6 +158,7 @@ export default class FileList extends Vue {
 
   private onSearchStart () {
     this.isSearchText = true
+    this.searchText = ''
   }
 
   private onSearchStop () {
