@@ -20,7 +20,7 @@
         </div>
         <div :class="['file-item', {'is-active': isActiveItem(item)}]" v-for="item in fileList" :key="item.path" @click="onClickItem(item)" >{{ item.name }}</div>
       </div>
-      <div v-else class="is-empty">加载中...</div>
+      <div v-else class="file-item">加载中...</div>
     </div>
   </div>
 </template>
@@ -227,10 +227,6 @@ export default class FileList extends Vue {
 
     &::-webkit-scrollbar-thumb {
       background: #f8f8f8;
-    }
-
-    .is-empty {
-      padding: 8px;
     }
 
     .file-item {

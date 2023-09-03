@@ -17,7 +17,7 @@
 </div>
 </template>
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 import FileList from '@/components/FileList.vue' // @ is an alias to /src
 import { decodeUrlSafeBase64, encodeUrlSafeBase64 } from '@/src/util'
 import MarkdownView from '@/components/MarkdownView.vue'
@@ -26,6 +26,7 @@ import Footer from '@/components/Footer.vue'
 import Panel from '@/components/Panel.vue'
 import MetaView from '@/components/MetaView.vue'
 import PathView from '@/components/PathView.vue'
+import { RawLocation } from 'vue-router'
 
 @Component({
   components: {
@@ -56,11 +57,13 @@ export default class Home extends Vue {
 
   public mounted () {
     const path = this.$route.params.path || ''
+    const tag = this.$route.query.tag as string || ''
     if (path.length > 0) {
       this.currentPath = decodeUrlSafeBase64(path)
     } else {
       this.currentPath = '/'
     }
+    this.currentTag = tag
     this.showDetail(this.currentPath)
   }
 
@@ -70,12 +73,6 @@ export default class Home extends Vue {
     }
     this.currentPath = path
     this.showDetail(this.currentPath)
-    this.$router.push({
-      name: 'Path',
-      params: {
-        path: encodeUrlSafeBase64(path)
-      }
-    })
   }
 
   private async showDetail (path: string, fileMeta?: FileMeta) {
@@ -107,6 +104,21 @@ export default class Home extends Vue {
 
   private onClickTag (tag: Tag) {
     this.currentTag = tag.name
+  }
+
+  @Watch('currentPath')
+  @Watch('currentTag')
+  private updateRoute () {
+    const location: RawLocation = {
+      name: 'Path',
+      params: {
+        path: encodeUrlSafeBase64(this.currentPath)
+      }
+    }
+    if (this.currentTag) {
+      location.query = { tag: this.currentTag }
+    }
+    this.$router.push(location)
   }
 
   private onClearTag () {
