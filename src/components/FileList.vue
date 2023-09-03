@@ -43,8 +43,6 @@ export default class FileList extends Vue {
 
   public searchText = ''
   public searchTag = ''
-  public isSearchText = false
-  public isSearchTag = false
   public searchList: FileMeta[] = []
 
   public isLoaded = false
@@ -76,6 +74,14 @@ export default class FileList extends Vue {
     return this.currentDir?.children || []
   }
 
+  get isSearchText () {
+    return this.searchText.length > 0
+  }
+
+  get isSearchTag () {
+    return this.searchTag.length > 0
+  }
+
   @Watch('path')
   public initPath () {
     if (this.path === this.currentPath) {
@@ -92,9 +98,6 @@ export default class FileList extends Vue {
       return
     }
     this.searchTag = this.tag || ''
-    if (this.searchTag.length > 0) {
-      this.isSearchTag = true
-    }
   }
 
   @Watch('text')
@@ -103,7 +106,6 @@ export default class FileList extends Vue {
       return
     }
     this.searchText = this.text
-    this.startSearch(this.searchText)
   }
 
   private async loadPath (path: string) {
@@ -151,11 +153,8 @@ export default class FileList extends Vue {
   @Watch('searchText')
   @Watch('searchTag')
   private onSearch () {
-    const isEnableSearch = this.searchText.length > 0
-    const isEnableTagSearch = this.searchTag.length > 0
     const currentDir = this.currentDir?.path || '/'
-    console.log('onSearch', this.isSearchText, this.searchTag, isEnableSearch, isEnableTagSearch)
-    if (isEnableSearch || isEnableTagSearch) {
+    if (this.isSearchText || this.isSearchTag) {
       this.handleSearch(currentDir, this.searchText, this.searchTag)
     }
   }
@@ -170,23 +169,8 @@ export default class FileList extends Vue {
     this.isLoaded = true
   }
 
-  private onSearchStart () {
-    this.startSearch('')
-  }
-
-  private onSearchStop () {
-    this.isSearchText = false
-    this.searchText = ''
-  }
-
-  private startSearch (text: string) {
-    this.isSearchText = true
-    this.searchText = text
-  }
-
   private onClickTagClose () {
     this.searchTag = ''
-    this.isSearchTag = false
     this.$emit('clearTag')
   }
 
