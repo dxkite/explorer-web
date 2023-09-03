@@ -1,10 +1,11 @@
 <template>
   <div :class="['panel', {'is-open': isOpen}]">
-    <div class="website-info" @click="onClickLogo">
+    <div class="website-info" @click="onClickOpenClose">
       <div class="website-logo"><img src="@/assets/dxkite.png"/></div>
       <div class="website-name">{{ config.name }}</div>
     </div>
     <div class="tag-panel" v-if="showTag">
+      <div class="tag-icon" @click="onClickOpenClose"><img src="@/assets/tag.svg"/></div>
       <div class="tag-title">标签</div>
       <div class="tag-list">
         <div class="tag-item" v-for="item in tagList" :key="item.name" @click="onClickTag(item)">
@@ -49,7 +50,7 @@ export default class Panel extends Vue {
     this.tagList = tagList
   }
 
-  private onClickLogo () {
+  private onClickOpenClose () {
     this.isOpen = !this.isOpen
   }
 }
@@ -62,32 +63,43 @@ export default class Panel extends Vue {
   transition: .5s;
 
   &.is-open {
-
     width: 256px;
     .website-info {
-
       padding: 32px;
       .website-logo {
-
-      width: 128px;
-      height: 128px;
+        width: 128px;
+        height: 128px;
       }
       .website-name {
         transform: scale(1);
         opacity: 1;
+        display: block;
       }
     }
     .tag-panel {
-      transform: scale(1);
-      opacity: 1;
+      .tag-icon {
+        transform: scale(0);
+        opacity: 0;
+        display: none;
+      }
+      .tag-title {
+        transform: scale(1);
+        opacity: 1;
+        display: block;
+      }
+      .tag-list {
+        transform: scale(1);
+        opacity: 1;
+        display: flex;
+      }
     }
   }
 
   .website-info {
-     padding: 16px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     .website-logo {
       width: 32px;
@@ -101,6 +113,7 @@ export default class Panel extends Vue {
     .website-name {
       transform: scale(0);
       opacity: 0;
+      display: none;
       font-size: 18px;
       padding: 16px;
       opacity: 1;
@@ -110,18 +123,27 @@ export default class Panel extends Vue {
   .tag-panel {
     padding: 16px;
     transition: .3s;
-    transform: scale(0);
-    opacity: 0;
+
+    .tag-icon {
+      display: flex;
+      justify-content: center;
+    }
 
     .tag-title {
       font-size: 18px;
       margin-bottom: 8px;
+      transform: scale(0);
+      opacity: 0;
+      display: none;
     }
 
     .tag-list {
+      transform: scale(0);
+      opacity: 0;
       display: flex;
       flex-wrap: wrap;
       margin-left: -4px;
+      display: none;
 
       .tag-item {
         padding-left: 4px;
