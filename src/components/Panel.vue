@@ -1,6 +1,6 @@
 <template>
-  <div class="panel">
-    <div class="website-info">
+  <div :class="['panel', {'is-open': isOpen}]">
+    <div class="website-info" @click="onClickLogo">
       <div class="website-logo"><img src="@/assets/dxkite.png"/></div>
       <div class="website-name">{{ config.name }}</div>
     </div>
@@ -30,6 +30,7 @@ export default class Panel extends Vue {
   private config!: WebsiteConfig
 
   public tagList: TagItem[] = []
+  public isOpen = false
 
   get showTag () {
     return this.tagList.length > 0
@@ -47,23 +48,50 @@ export default class Panel extends Vue {
     const tagList = await getTagList()
     this.tagList = tagList
   }
+
+  private onClickLogo () {
+    this.isOpen = !this.isOpen
+  }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .panel {
-  width: 256px;
+  width: 64px;
+  transition: .5s;
 
-  .website-info {
-    padding: 32px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  &.is-open {
 
-    .website-logo {
+    width: 256px;
+    .website-info {
+
+      padding: 32px;
+      .website-logo {
+
       width: 128px;
       height: 128px;
+      }
+      .website-name {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    .tag-panel {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  .website-info {
+     padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+    .website-logo {
+      width: 32px;
+      height: 32px;
       img {
         width: 100%;
         height: 100%;
@@ -71,12 +99,19 @@ export default class Panel extends Vue {
     }
 
     .website-name {
+      transform: scale(0);
+      opacity: 0;
       font-size: 18px;
       padding: 16px;
+      opacity: 1;
+      transition: .3s;
     }
   }
   .tag-panel {
     padding: 16px;
+    transition: .3s;
+    transform: scale(0);
+    opacity: 0;
 
     .tag-title {
       font-size: 18px;
