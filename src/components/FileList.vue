@@ -1,13 +1,16 @@
 <template>
   <div class="file-explorer">
-    <div class="tag-filter" v-if="hasTag">
-      <div class="tag-name">{{ tag }}</div>
-      <div class="tag-close" @click="onClickTagClose">
-        <img src="@/assets/close.svg"/>
-      </div>
-    </div>
     <SearchInput class="file-search" v-model="searchText" @open="onSearchStart" @close="onSearchStop" />
-    <div  class="file-list">
+    <div class="file-list">
+      <div class="filter-item" v-if="hasTag">
+        <div class="filter-title">
+          <div class="filter-icon"><img src="@/assets/tag.svg"/></div>
+          <div class="filter-name">{{ tag }}</div>
+        </div>
+        <div class="tag-close" @click="onClickTagClose">
+          <img src="@/assets/close.svg"/>
+        </div>
+      </div>
       <div v-if="isLoaded">
         <div class="file-item" v-if="hasPrevious" @click="onClickPrevious">..</div>
         <div :class="['file-item', {'is-active': isActiveItem(item)}]" v-for="item in fileList" :key="item.path" @click="onClickItem(item)" >{{ item.name }}</div>
@@ -166,17 +169,25 @@ export default class FileList extends Vue {
   display: flex;
   flex-direction: column;
 
-  .tag-filter {
+  .filter-item {
     padding: 8px;
+    border-radius: 8px;
+    background-color: #f8f8f8;
+    margin-bottom: 2px;
+    cursor: pointer;
+    user-select: none;
     display: flex;
     justify-content: space-between;
-    align-items: center;
 
-    .tag-name {
-      line-height: 24px;
+    .filter-title {
+      display: flex;
+      align-items: center;
+      .filter-icon {
+        padding-right: 8px;
+      }
     }
 
-    .tag-close {
+    .filter-close {
       display: flex;
       justify-content: center;
       align-items: center;
