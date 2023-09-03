@@ -52,8 +52,9 @@ export default class Home extends Vue {
   }
 
   public mounted () {
-    if (this.$route.params.path.length > 0) {
-      this.currentPath = decodeUrlSafeBase64(this.$route.params.path)
+    const path = this.$route.params.path || ''
+    if (path.length > 0) {
+      this.currentPath = decodeUrlSafeBase64(path)
     } else {
       this.currentPath = '/'
     }
@@ -75,10 +76,17 @@ export default class Home extends Vue {
     })
   }
 
-  private async showDetail (path: string) {
+  private async showDetail (path: string, fileMeta?: FileMeta) {
     this.detailLoaded = false
     this.showMarkdown = false
-    const meta = await getFileMeta(path)
+    let meta = fileMeta
+    if (!fileMeta) {
+      meta = await getFileMeta(path)
+    }
+    if (!meta) {
+      console.log('empty meta')
+      return
+    }
     this.currentMeta = meta
     if (meta.path.toLowerCase().endsWith('.md')) {
       this.showPath = meta.path

@@ -114,7 +114,7 @@ export default class FileList extends Vue {
   }
 
   private onClickItem (file: FileMeta) {
-    this.$emit('click', file.path)
+    this.$emit('click', file.path, file)
     this.currentPath = file.path
     if (file.isDir) {
       this.loadPath(file.path)
