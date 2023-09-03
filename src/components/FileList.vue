@@ -12,7 +12,12 @@
         </div>
       </div>
       <div v-if="isLoaded">
-        <div class="file-item" v-if="hasPrevious" @click="onClickPrevious">..</div>
+        <div class="file-item" v-if="hasPrevious" @click="onClickPrevious">
+          <div class="item-text">
+            <div class="item-icon"><img src="@/assets/back.svg"/></div>
+            <div class="item-title">上级目录</div>
+          </div>
+        </div>
         <div :class="['file-item', {'is-active': isActiveItem(item)}]" v-for="item in fileList" :key="item.path" @click="onClickItem(item)" >{{ item.name }}</div>
       </div>
       <div v-else class="is-empty">加载中...</div>
@@ -229,6 +234,13 @@ export default class FileList extends Vue {
       margin-bottom: 2px;
       cursor: pointer;
       user-select: none;
+      display: flex;
+      .item-text {
+        display: flex;
+        .item-icon {
+          padding-right: 8px;
+        }
+      }
     }
 
     .file-item:hover, .file-item.is-active {
