@@ -4,7 +4,9 @@
     <Panel @tagClick="onClickTag" :config="config"/>
     <FileList :path="currentPath" :tag="currentTag" class="file-list" @click="onClickFile" @clearTag="onClearTag"/>
     <div class="content-view">
-      <div class="content-title">{{ showPath }}</div>
+      <div class="content-title">
+        <PathView :path="showPath" @click="onClickFile"/>
+      </div>
       <div class="content-body">
         <MarkdownView class="markdown-view content-item" v-if="showMarkdown" :path="showPath"/>
         <MetaView class="content-item" v-if="currentMeta" :meta="currentMeta"/>
@@ -23,6 +25,7 @@ import { FileMeta, getFileMeta, Tag, WebsiteConfig } from '@/src/api'
 import Footer from '@/components/Footer.vue'
 import Panel from '@/components/Panel.vue'
 import MetaView from '@/components/MetaView.vue'
+import PathView from '@/components/PathView.vue'
 
 @Component({
   components: {
@@ -30,7 +33,8 @@ import MetaView from '@/components/MetaView.vue'
     MarkdownView,
     Footer,
     Panel,
-    MetaView
+    MetaView,
+    PathView
   }
 })
 export default class Home extends Vue {
