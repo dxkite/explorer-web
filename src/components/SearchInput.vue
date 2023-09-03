@@ -17,7 +17,7 @@
 
 <script lang="ts">
 import { nextTick } from 'vue'
-import { Component, Prop, Ref, Vue } from 'vue-property-decorator'
+import { Component, Prop, Ref, Vue, Watch } from 'vue-property-decorator'
 
 @Component
 export default class SearchInput extends Vue {
@@ -27,22 +27,42 @@ export default class SearchInput extends Vue {
   private inputFocus = false
 
   private mounted () {
+    this.initText()
+  }
+
+  @Watch('value')
+  private onSearchTextChange () {
+    if (this.value === this.inputText) {
+      return
+    }
+    this.initText()
+  }
+
+  private initText () {
     this.inputText = this.value || ''
+    if (this.inputText.length > 0) {
+      this.startSearch(this.inputText)
+    }
   }
 
   private onClickSearchOpen () {
+    this.startSearch('')
+  }
+
+  private startSearch (text: string) {
     this.inputFocus = true
-    this.inputText = ''
-    this.input.value = ''
+    this.inputText = text
+    this.input.value = text
     nextTick(() => {
       this.input.focus()
-      this.$emit('open')
     })
   }
 
   private onClickSearchClose () {
     this.inputFocus = false
-    this.$emit('close')
+    this.inputText = ''
+    this.input.value = ''
+    this.$emit('input', '')
   }
 
   private onInput () {

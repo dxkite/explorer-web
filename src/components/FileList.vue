@@ -1,6 +1,6 @@
 <template>
   <div class="file-explorer">
-    <SearchInput class="file-search" v-model="searchText" @open="onSearchStart" @close="onSearchStop" />
+    <SearchInput class="file-search" v-model="searchText" />
     <div class="file-list">
       <div class="filter-item" v-if="hasTag">
         <div class="filter-title">
@@ -39,6 +39,7 @@ import { hasPreviousPath, getDirName } from '@/src/util'
 export default class FileList extends Vue {
   @Prop() public path!: string
   @Prop() public tag!: string
+  @Prop() public text!: string
 
   public searchText = ''
   public searchTag = ''
@@ -64,6 +65,7 @@ export default class FileList extends Vue {
   public mounted () {
     this.initTag()
     this.initPath()
+    this.initText()
   }
 
   get fileList () {
@@ -86,10 +88,22 @@ export default class FileList extends Vue {
 
   @Watch('tag')
   public initTag () {
+    if (this.tag === this.searchTag) {
+      return
+    }
     this.searchTag = this.tag || ''
     if (this.searchTag.length > 0) {
       this.isSearchTag = true
     }
+  }
+
+  @Watch('text')
+  public initText () {
+    if (this.text === this.searchText) {
+      return
+    }
+    this.searchText = this.text
+    this.startSearch(this.searchText)
   }
 
   private async loadPath (path: string) {
@@ -137,10 +151,10 @@ export default class FileList extends Vue {
   @Watch('searchText')
   @Watch('searchTag')
   private onSearch () {
-    const isEnableSearch = this.isSearchText && this.searchText.length > 0
+    const isEnableSearch = this.searchText.length > 0
     const isEnableTagSearch = this.searchTag.length > 0
     const currentDir = this.currentDir?.path || '/'
-    console.log(this.isSearchText, this.searchTag, isEnableSearch, isEnableTagSearch)
+    console.log('onSearch', this.isSearchText, this.searchTag, isEnableSearch, isEnableTagSearch)
     if (isEnableSearch || isEnableTagSearch) {
       this.handleSearch(currentDir, this.searchText, this.searchTag)
     }
@@ -149,16 +163,15 @@ export default class FileList extends Vue {
   private async handleSearch (path: string, text: string, tag: string) {
     this.isLoaded = false
     this.searchList = []
-    console.log('searching...', text)
+    console.log('searching...', { text, path, tag })
     const current = await searchFileMeta(path, text, tag)
     this.searchList = current
-    console.log('search finish', text, current)
+    console.log('search finish', { text, path, tag }, text, current)
     this.isLoaded = true
   }
 
   private onSearchStart () {
-    this.isSearchText = true
-    this.searchText = ''
+    this.startSearch('')
   }
 
   private onSearchStop () {
@@ -166,10 +179,20 @@ export default class FileList extends Vue {
     this.searchText = ''
   }
 
+  private startSearch (text: string) {
+    this.isSearchText = true
+    this.searchText = text
+  }
+
   private onClickTagClose () {
     this.searchTag = ''
     this.isSearchTag = false
     this.$emit('clearTag')
+  }
+
+  @Watch('searchText')
+  private onSearchTextChange () {
+    this.$emit('searchTextChange', this.searchText)
   }
 }
 </script>

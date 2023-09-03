@@ -2,7 +2,7 @@
 <div class="main">
   <div class="container">
     <Panel @tagClick="onClickTag" :config="config"/>
-    <FileList :path="currentPath" :tag="currentTag" class="file-list" @click="onClickFile" @clearTag="onClearTag"/>
+    <FileList :path="currentPath" :tag="currentTag" :text="currentSearch" class="file-list" @click="onClickFile" @clearTag="onClearTag" @searchTextChange="onSearchTextChange"/>
     <div class="content-view">
       <div class="content-title">
         <PathView :path="currentPath" @click="onClickFile"/>
@@ -40,10 +40,13 @@ import { RawLocation } from 'vue-router'
 })
 export default class Home extends Vue {
   private currentPath = ''
+  private currentTag = ''
+  private currentSearch = ''
+
   private detailLoaded = false
   private showMarkdown = false
   private showMarkdownPath = ''
-  private currentTag = ''
+
   private currentMeta: FileMeta | null = null
 
   private config: WebsiteConfig = {
@@ -58,12 +61,15 @@ export default class Home extends Vue {
   public mounted () {
     const path = this.$route.params.path || ''
     const tag = this.$route.query.tag as string || ''
+    const search = this.$route.query.search as string || ''
+    console.log('mounted', { path, tag, search })
     if (path.length > 0) {
       this.currentPath = decodeUrlSafeBase64(path)
     } else {
       this.currentPath = '/'
     }
     this.currentTag = tag
+    this.currentSearch = search
     this.showDetail(this.currentPath)
   }
 
@@ -108,21 +114,32 @@ export default class Home extends Vue {
 
   @Watch('currentPath')
   @Watch('currentTag')
+  @Watch('currentSearch')
   private updateRoute () {
     const location: RawLocation = {
       name: 'Path',
       params: {
         path: encodeUrlSafeBase64(this.currentPath)
-      }
+      },
+      query: {}
     }
-    if (this.currentTag) {
-      location.query = { tag: this.currentTag }
+    if (this.currentTag && location.query) {
+      location.query.tag = this.currentTag
     }
+    if (this.currentSearch && location.query) {
+      location.query.search = this.currentSearch
+    }
+    console.log('updateRoute', location)
     this.$router.push(location)
   }
 
   private onClearTag () {
     this.currentTag = ''
+  }
+
+  private onSearchTextChange (text: string) {
+    console.log('onSearchTextChange', text)
+    this.currentSearch = text
   }
 }
 </script>
