@@ -162,6 +162,7 @@ export default class FileList extends Vue {
 
   private onSearchStop () {
     this.isSearchText = false
+    this.searchText = ''
   }
 
   private onClickTagClose () {

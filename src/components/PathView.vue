@@ -31,7 +31,7 @@ export default class PathView extends Vue {
   private pathName: PathInfo[] = []
 
   get hasBaseArrow () {
-    return this.pathName.length > 0
+    return this.path !== '/'
   }
 
   private mounted () {
