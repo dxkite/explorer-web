@@ -61,6 +61,7 @@ export default class PathView extends Vue {
 .path-view {
   display: flex;
   justify-items: center;
+  height: 24px;
 
   .path-icon {
     width: 14px;

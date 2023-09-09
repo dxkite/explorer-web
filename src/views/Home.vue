@@ -64,6 +64,7 @@ export default class Home extends Vue {
     this.currentTag = tag
     this.currentSearch = search
     this.showDetail(this.currentPath)
+    this.setTitle(this.config.name)
   }
 
   public onClickFile (path: string) {
@@ -93,6 +94,7 @@ export default class Home extends Vue {
       this.currentPath = meta.readme
       this.showMarkdownContent(this.currentPath)
     }
+    this.setTitle([this.config.name, this.currentPath].join(' - '))
     this.detailLoaded = true
   }
 
@@ -164,6 +166,10 @@ export default class Home extends Vue {
   private onSearchTextChange (text: string) {
     console.log('onSearchTextChange', text)
     this.currentSearch = text
+  }
+
+  private setTitle (title: string) {
+    document.title = title
   }
 }
 </script>
