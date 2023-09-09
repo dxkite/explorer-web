@@ -1,15 +1,6 @@
-import { b64urlEncode, b64urlDecode } from '@waiting/base64'
 import path from 'path'
 import { API } from './const'
 import router from '@/router'
-
-export const encodeUrlSafeBase64 = (val: string) => {
-  return b64urlEncode(val)
-}
-
-export const decodeUrlSafeBase64 = (val: string) => {
-  return b64urlDecode(val)
-}
 
 export const getPreviousPath = (name: string) => {
   return path.dirname(name)
@@ -32,8 +23,7 @@ export const replaceMarkdownLink = (content: string) => {
 
     let newUrl = `${API.raw}/${link}`
     if (/\.md/i.test(link)) {
-      const encodeLink = encodeUrlSafeBase64(link)
-      const currentRoute = router.resolve({ name: 'Path', params: { path: encodeLink } })
+      const currentRoute = router.resolve({ name: 'Path', params: { path: link } })
       newUrl = currentRoute.href
     }
 

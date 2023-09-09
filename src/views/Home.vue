@@ -19,7 +19,6 @@
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import FileList from '@/components/FileList.vue' // @ is an alias to /src
-import { decodeUrlSafeBase64, encodeUrlSafeBase64 } from '@/src/util'
 import MarkdownView from '@/components/MarkdownView.vue'
 import { FileMeta, getFileMeta, Tag, WebsiteConfig } from '@/src/api'
 import Footer from '@/components/Footer.vue'
@@ -132,10 +131,7 @@ export default class Home extends Vue {
   }
 
   private getCurrentRoute () {
-    let path = this.$route.params.path || ''
-    if (path) {
-      path = decodeUrlSafeBase64(path)
-    }
+    const path = this.$route.params.path || ''
     const tag = this.$route.query.tag as string || ''
     const search = this.$route.query.search as string || ''
     return { path, tag, search }
@@ -145,7 +141,7 @@ export default class Home extends Vue {
     const location: RawLocation = {
       name: 'Path',
       params: {
-        path: encodeUrlSafeBase64(this.currentPath)
+        path: this.currentPath
       },
       query: {}
     }
