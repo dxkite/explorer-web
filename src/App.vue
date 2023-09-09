@@ -5,8 +5,5 @@
 </template>
 
 <style lang="scss">
-html,body {
-  padding: 0;
-  margin: 0;
-}
+@import "@/scss/global.scss";
 </style>
