@@ -50,7 +50,7 @@ export default class MarkdownView extends Vue {
   @Watch('path')
   private async loadPath () {
     const raw = await getFileRawText(this.path)
-    this.content = replaceMarkdownLink(raw)
+    this.content = replaceMarkdownLink(this.path, raw)
   }
 }
 </script>

@@ -14,16 +14,18 @@ export const hasPreviousPath = (path: string) => {
   return path !== '/'
 }
 
-export const replaceMarkdownLink = (content: string) => {
+export const replaceMarkdownLink = (filepath: string, content: string) => {
+  const dirname = path.dirname(filepath)
   return content.replaceAll(/(!?)\[([^\]]*?)\]\(([^)]+?)\)/g, (substr: string, img: string, name: string, link: string) => {
     // 链接直接调过不处理
     if (/^\w+:/.test(link.trim())) {
       return substr
     }
 
-    let newUrl = `${API.raw}/${link}`
+    const linkFull = path.join(dirname, link)
+    let newUrl = `${API.raw}/${linkFull}`
     if (/\.md/i.test(link)) {
-      const currentRoute = router.resolve({ name: 'Path', params: { path: link } })
+      const currentRoute = router.resolve({ name: 'Path', params: { path: linkFull } })
       newUrl = currentRoute.href
     }
 
