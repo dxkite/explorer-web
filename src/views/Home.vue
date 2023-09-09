@@ -175,52 +175,5 @@ export default class Home extends Vue {
 </script>
 
 <style lang="scss" scoped>
-  .container {
-    display: flex;
-    height: calc(100vh - 36px);
-
-    .file-list {
-      width: 300px;
-    }
-
-    .content-view {
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      width: 60%;
-
-      .content-title {
-        padding: 16px;
-        line-height: 24px;
-      }
-
-      .content-body {
-        padding: 24px;
-        background-color: #f8f8f8;
-        overflow-y: auto;
-        flex-grow: 1;
-
-        &::-webkit-scrollbar {
-          width: 4px;
-        }
-
-        &::-webkit-scrollbar-track {
-          background-color: #fcfcfc;
-        }
-
-        &::-webkit-scrollbar-thumb {
-          background: #f8f8f8;
-        }
-      }
-    }
-
-    .markdown-view {
-      padding: 24px;
-      background-color: #ffffff;
-    }
-
-    .content-item+.content-item {
-      margin-top: 16px;
-    }
-  }
+@import "@/scss/layout.scss";
 </style>

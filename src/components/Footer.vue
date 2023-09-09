@@ -18,31 +18,6 @@ export default class Footer extends Vue {
   private config!: WebsiteConfig
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-.footer {
-  font-size: 16px;
-  line-height: 20px;
-  padding: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  .website-record, .police-record {
-    text-decoration: none;
-    color: #000;
-  }
-
-  .footer-item+.footer-item {
-    padding-left: 16px;
-  }
-
-  .police-record {
-    display: flex;
-    .icon {
-      padding-right: 8px;
-    }
-  }
-}
+<style lang="scss" scoped>
+@import "@/scss/layout.scss";
 </style>
