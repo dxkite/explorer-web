@@ -97,12 +97,16 @@ export default new Vuex.Store<Data>({
   actions: {
     async switchMeta (context, meta: FileMeta) {
       console.log('switchMeta', meta)
+      context.commit('setListLoading', meta.isDir)
       await context.dispatch('loadPath', meta.path)
       context.commit('updatePath', meta)
+      context.commit('setListLoading', false)
     },
     async loadPrevious (context) {
+      context.commit('setListLoading', true)
       const previous = path.dirname(context.state.dirPath)
       await context.dispatch('loadPath', previous)
+      context.commit('setListLoading', false)
     },
     async loadPath (context, path) {
       await context.dispatch('load', {
@@ -118,7 +122,6 @@ export default new Vuex.Store<Data>({
         console.log('load ignore', { pathname, tag, search })
         return
       }
-      context.commit('setListLoading', true)
 
       const meta = await getFileMeta(pathname)
       context.commit('updatePath', meta)
@@ -128,19 +131,22 @@ export default new Vuex.Store<Data>({
       } else {
         const dirPath = path.dirname(pathname)
         if (dirPath !== context.state.dirPath) {
+          context.commit('setListLoading', true)
           const dirMeta = await getFileMeta(dirPath)
           context.commit('updateDir', dirMeta)
+          context.commit('setListLoading', false)
         }
       }
 
       if (tag !== '' || search !== '') {
+        context.commit('setListLoading', true)
         context.commit('updateSearch', { tag, search })
         const list = await searchFileMeta(context.state.dirPath, search, tag)
         context.commit('updateList', list)
+        context.commit('setListLoading', false)
       }
 
       context.dispatch('previewMeta', meta)
-      context.commit('setListLoading', false)
     },
     async updateTag (context, tag: string) {
       context.commit('updateSearch', { tag, search: context.state.search })
