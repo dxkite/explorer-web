@@ -14,6 +14,11 @@ const routes: Array<RouteConfig> = [
     path: '/p/:path(.*)',
     name: 'Path',
     component: Home
+  },
+  {
+    path: '*',
+    name: 'NotFound',
+    component: Home
   }
 ]
 
