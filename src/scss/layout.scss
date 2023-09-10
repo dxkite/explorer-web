@@ -16,6 +16,7 @@
     .content-title {
       background-color: #ffffff;
       margin-bottom: 8px;
+      padding: 0 8px;
     }
 
     .content-body {
@@ -182,7 +183,7 @@
       }
 
       .content-body {
-        padding: 16px;
+        padding: 8px;
         overflow-y: auto;
         flex-grow: 1;
       }
