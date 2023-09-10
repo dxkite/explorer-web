@@ -60,6 +60,8 @@ export default class Home extends Vue {
   public mounted () {
     const { path, search, tag } = this.getCurrentRoute()
     this.$store.dispatch('load', { path, search, tag })
+    const name = this.$store.state.config.name
+    this.setTitle(name)
   }
 
   @Watch('path')
@@ -109,6 +111,10 @@ export default class Home extends Vue {
     }
     console.log('updateRoute', location)
     this.$router.push(location)
+
+    const name = this.$store.state.config.name
+
+    this.setTitle([name, this.path].join(' - '))
   }
 
   private setTitle (title: string) {
