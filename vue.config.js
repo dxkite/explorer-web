@@ -8,8 +8,10 @@ module.exports = {
     }
   },
   chainWebpack: config => {
-    // 配置包分析器
-    config.plugin('webpack-bundle-analyzer')
-      .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
+    if (process.env.NODE_ENV === 'dev') {
+      // 配置包分析器
+      config.plugin('webpack-bundle-analyzer')
+        .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
+    }
   }
 }
