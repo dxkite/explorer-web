@@ -22,7 +22,7 @@ export const replaceMarkdownLink = (filepath: string, content: string) => {
       return substr
     }
 
-    const linkFull = path.join(dirname, link)
+    const linkFull = encodeURIComponent(path.join(dirname, link))
     let newUrl = `${API.raw}/${linkFull}`
     if (/\.md/i.test(link)) {
       const currentRoute = router.resolve({ name: 'Path', params: { path: linkFull } })
