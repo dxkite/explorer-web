@@ -9,13 +9,13 @@
 </template>
 
 <script lang="ts">
-import { WebsiteConfig } from '@/src/api'
 import { Component, Prop, Vue } from 'vue-property-decorator'
 
 @Component
 export default class Footer extends Vue {
-  @Prop()
-  private config!: WebsiteConfig
+  get config () {
+    return this.$store.state.config
+  }
 }
 </script>
 <style lang="scss" scoped>

@@ -11,14 +11,14 @@
           <img src="@/assets/close.svg"/>
         </div>
       </div>
-      <div v-if="isLoaded">
+      <div v-if="!listLoading">
         <div class="file-item" v-if="hasPrevious" @click="onClickPrevious">
           <div class="item-text">
             <div class="item-icon"><img src="@/assets/back.svg"/></div>
             <div class="item-title">上级目录</div>
           </div>
         </div>
-        <div :class="['file-item', {'is-active': isActiveItem(item)}]" v-for="item in fileList" :key="item.path" @click="onClickItem(item)" >{{ item.name }}</div>
+        <div :class="['file-item', {'is-active': isActiveItem(item)}]" v-for="item in list" :key="item.path" @click="onClickItem(item)" >{{ item.name }}</div>
       </div>
       <div v-else class="file-item">加载中...</div>
     </div>
@@ -37,15 +37,8 @@ import { hasPreviousPath, getDirName } from '@/src/util'
   }
 })
 export default class FileList extends Vue {
-  @Prop() public path!: string
-  @Prop() public tag!: string
-  @Prop() public text!: string
-
   public searchText = ''
-  public searchTag = ''
   public searchList: FileMeta[] = []
-
-  public isLoaded = false
 
   public currentFile: FileMeta | null = null
   public currentDir: FileMeta | null = null
@@ -53,83 +46,36 @@ export default class FileList extends Vue {
   public currentPath = ''
 
   get hasTag () {
-    return this.searchTag.length > 0
+    return this.$store.state.searchTag !== ''
+  }
+
+  get tag () {
+    return this.$store.state.searchTag
+  }
+
+  get path () {
+    return this.$store.state.path
+  }
+
+  get search () {
+    return this.$store.state.search
   }
 
   get hasPrevious () {
-    return hasPreviousPath(this.currentDir?.path || '')
+    return this.$store.getters.hasPreviousPath
   }
 
-  public mounted () {
-    this.initTag()
-    this.initPath()
-    this.initText()
+  get list () {
+    return this.$store.state.list
   }
 
-  get fileList () {
-    console.log('currentDir', this.currentDir)
-    if (this.isSearchTag || this.isSearchText) {
-      return this.searchList
-    }
-    return this.currentDir?.children || []
-  }
-
-  get isSearchText () {
-    return this.searchText.length > 0
-  }
-
-  get isSearchTag () {
-    return this.searchTag.length > 0
-  }
-
-  @Watch('path')
-  public initPath () {
-    if (this.path === this.currentPath) {
-      return
-    }
-    this.currentPath = this.path || '/'
-    console.log('init', [this.currentPath, this.path])
-    this.loadPath(this.currentPath)
-  }
-
-  @Watch('tag')
-  public initTag () {
-    if (this.tag === this.searchTag) {
-      return
-    }
-    this.searchTag = this.tag || ''
-  }
-
-  @Watch('text')
-  public initText () {
-    if (this.text === this.searchText) {
-      return
-    }
-    this.searchText = this.text
-  }
-
-  private async loadPath (path: string) {
-    this.isLoaded = false
-    console.log('loading', path)
-    const current = await getFileMeta(path)
-    if (current.isDir) {
-      this.currentDir = current
-      this.currentFile = null
-    } else {
-      const dir = getDirName(this.currentPath)
-      const dirMeta = await getFileMeta(dir)
-      this.currentDir = dirMeta
-      this.currentFile = current
-    }
-    console.log('loaded', path, this.currentDir, this.currentFile)
-    this.isLoaded = true
+  get listLoading () {
+    return this.$store.state.listLoading
   }
 
   private onClickPrevious () {
-    if (this.hasPrevious && this.currentDir) {
-      this.currentPath = getDirName(this.currentDir.path)
-      this.loadPath(this.currentPath)
-      this.$emit('click', this.currentPath)
+    if (this.hasPrevious) {
+      this.$store.dispatch('loadPrevious')
     }
   }
 
@@ -137,46 +83,20 @@ export default class FileList extends Vue {
     if (file.isDir) {
       return false
     }
-    return file.path === this.currentFile?.path
+    return file.path === this.$store.state.path
   }
 
-  private onClickItem (file: FileMeta) {
-    this.$emit('click', file.path, file)
-    this.currentPath = file.path
-    if (file.isDir) {
-      this.loadPath(file.path)
-    } else {
-      this.currentFile = file
-    }
-  }
-
-  @Watch('searchText')
-  @Watch('searchTag')
-  private onSearch () {
-    const currentDir = this.currentDir?.path || '/'
-    if (this.isSearchText || this.isSearchTag) {
-      this.handleSearch(currentDir, this.searchText, this.searchTag)
-    }
-  }
-
-  private async handleSearch (path: string, text: string, tag: string) {
-    this.isLoaded = false
-    this.searchList = []
-    console.log('searching...', { text, path, tag })
-    const current = await searchFileMeta(path, text, tag)
-    this.searchList = current
-    console.log('search finish', { text, path, tag }, text, current)
-    this.isLoaded = true
+  private onClickItem (meta: FileMeta) {
+    this.$store.dispatch('switchMeta', meta)
   }
 
   private onClickTagClose () {
-    this.searchTag = ''
-    this.$emit('clearTag')
+    this.$store.dispatch('updateTag', '')
   }
 
   @Watch('searchText')
   private onSearchTextChange () {
-    this.$emit('searchTextChange', this.searchText)
+    this.$store.dispatch('updateSearch', this.searchText)
   }
 }
 </script>

@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Watch } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 
 interface PathInfo {
   name: string
@@ -27,8 +27,11 @@ interface PathInfo {
 
 @Component
 export default class PathView extends Vue {
-  @Prop() path!: string
   private pathName: PathInfo[] = []
+
+  get path () {
+    return this.$store.state.path
+  }
 
   get hasBaseArrow () {
     return this.path !== '/'
@@ -42,7 +45,7 @@ export default class PathView extends Vue {
   private initPath () {
     const path = this.path || ''
     const val = path.replace(/^\//, '').trim().split('/')
-    this.pathName = val.map((v, idx) => ({ name: v, path: '/' + [...val].slice(0, idx + 1).join('/') }))
+    this.pathName = val.map((v :string, idx: number) => ({ name: v, path: '/' + [...val].slice(0, idx + 1).join('/') }))
   }
 
   private hasArrow (idx: number) {
@@ -50,8 +53,7 @@ export default class PathView extends Vue {
   }
 
   private onClickPath (path: string) {
-    console.log('click', path)
-    this.$emit('click', path)
+    this.$store.dispatch('loadPath', path)
   }
 }
 </script>

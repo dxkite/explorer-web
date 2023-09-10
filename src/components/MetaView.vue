@@ -19,16 +19,14 @@ import { Component, Prop, Ref, Vue, Watch } from 'vue-property-decorator'
 
 @Component
 export default class MetaView extends Vue {
-  @Prop() private meta!: FileMeta
+  get meta () {
+    return this.$store.state.pathMeta
+  }
 
   private path = ''
   private modTime = ''
   private isDir = false
   private downloadLink = ''
-
-  private mounted () {
-    this.loadMeta()
-  }
 
   @Watch('meta')
   private async loadMeta () {

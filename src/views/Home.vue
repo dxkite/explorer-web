@@ -1,26 +1,25 @@
 <template>
 <div class="main">
   <div class="container">
-    <Panel @tagClick="onClickTag" :config="config"/>
-    <FileList :path="currentPath" :tag="currentTag" :text="currentSearch" class="file-list" @click="onClickFile" @clearTag="onClearTag" @searchTextChange="onSearchTextChange"/>
+    <Panel />
+    <FileList class="file-list"/>
     <div class="content-view">
       <div class="content-title">
-        <PathView :path="currentPath" @click="onClickFile"/>
+        <PathView />
       </div>
       <div class="content-body">
-        <MarkdownView class="markdown-view content-item" v-if="showMarkdown" :path="currentPath"/>
-        <MetaView class="content-item" v-if="currentMeta" :meta="currentMeta"/>
+        <MarkdownView class="markdown-view content-item" v-if="showMarkdown"/>
+        <MetaView class="content-item"/>
       </div>
     </div>
   </div>
-  <Footer :config="config"/>
+  <Footer />
 </div>
 </template>
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import FileList from '@/components/FileList.vue' // @ is an alias to /src
 import MarkdownView from '@/components/MarkdownView.vue'
-import { FileMeta, getFileMeta, Tag, WebsiteConfig } from '@/src/api'
 import Footer from '@/components/Footer.vue'
 import Panel from '@/components/Panel.vue'
 import MetaView from '@/components/MetaView.vue'
@@ -38,77 +37,30 @@ import { RawLocation } from 'vue-router'
   }
 })
 export default class Home extends Vue {
-  private currentPath = ''
-  private currentTag = ''
-  private currentSearch = ''
+  get tag () {
+    return this.$store.state.searchTag
+  }
 
-  private detailLoaded = false
-  private showMarkdown = false
-  private showMarkdownPath = ''
+  get path (): string {
+    return this.$store.state.path
+  }
 
-  private currentMeta: FileMeta | null = null
+  get search () {
+    return this.$store.state.search
+  }
 
-  private config: WebsiteConfig = {
-    name: 'dxkite的网站',
-    copyrightName: 'dxkite',
-    websiteRecord: '湘ICP备20002416号-1',
-    websiteRecordLink: 'https://beian.miit.gov.cn/',
-    websitePoliceRecord: '湘公网安备 43112602000222号',
-    websitePoliceLink: 'http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=43112602000222'
+  get showMarkdown () {
+    return this.$store.state.markdown.show
   }
 
   public mounted () {
     const { path, search, tag } = this.getCurrentRoute()
-    this.currentPath = path || '/'
-    this.currentTag = tag
-    this.currentSearch = search
-    this.showDetail(this.currentPath)
-    this.setTitle(this.config.name)
+    this.$store.dispatch('load', { path, search, tag })
   }
 
-  public onClickFile (path: string) {
-    if (this.currentPath === path) {
-      return
-    }
-    this.currentPath = path
-    this.showDetail(this.currentPath)
-  }
-
-  private async showDetail (path: string, fileMeta?: FileMeta) {
-    this.detailLoaded = false
-    this.showMarkdown = false
-    let meta = fileMeta
-    if (!fileMeta) {
-      meta = await getFileMeta(path)
-    }
-    if (!meta) {
-      console.log('empty meta')
-      return
-    }
-    this.currentMeta = meta
-    if (meta.path.toLowerCase().endsWith('.md')) {
-      this.currentPath = meta.path
-      this.showMarkdownContent(this.currentPath)
-    } else if (meta.readme && meta.readme.length > 0) {
-      this.currentPath = meta.readme
-      this.showMarkdownContent(this.currentPath)
-    }
-    this.setTitle([this.config.name, this.currentPath].join(' - '))
-    this.detailLoaded = true
-  }
-
-  private showMarkdownContent (path: string) {
-    this.showMarkdown = true
-    this.showMarkdownPath = path
-  }
-
-  private onClickTag (tag: Tag) {
-    this.currentTag = tag.name
-  }
-
-  @Watch('currentPath')
-  @Watch('currentTag')
-  @Watch('currentSearch')
+  @Watch('path')
+  @Watch('search')
+  @Watch('tag')
   private handleRouteUpdate () {
     if (!this.isRouteChange) {
       return
@@ -118,20 +70,20 @@ export default class Home extends Vue {
 
   get isRouteChange () {
     const { path, search, tag } = this.getCurrentRoute()
-    if (path !== this.currentPath) {
+    if (path !== this.path) {
       return true
     }
-    if (search !== this.currentSearch) {
+    if (search !== this.search) {
       return true
     }
-    if (tag !== this.currentTag) {
+    if (tag !== this.tag) {
       return true
     }
     return false
   }
 
   private getCurrentRoute () {
-    const path = this.$route.params.path || ''
+    const path = this.$route.params.path || '/'
     const tag = this.$route.query.tag as string || ''
     const search = this.$route.query.search as string || ''
     return { path, tag, search }
@@ -141,27 +93,18 @@ export default class Home extends Vue {
     const location: RawLocation = {
       name: 'Path',
       params: {
-        path: this.currentPath
+        path: this.path
       },
       query: {}
     }
-    if (this.currentTag && location.query) {
-      location.query.tag = this.currentTag
+    if (this.tag && location.query) {
+      location.query.tag = this.tag
     }
-    if (this.currentSearch && location.query) {
-      location.query.search = this.currentSearch
+    if (this.search && location.query) {
+      location.query.search = this.search
     }
     console.log('updateRoute', location)
     this.$router.push(location)
-  }
-
-  private onClearTag () {
-    this.currentTag = ''
-  }
-
-  private onSearchTextChange (text: string) {
-    console.log('onSearchTextChange', text)
-    this.currentSearch = text
   }
 
   private setTitle (title: string) {

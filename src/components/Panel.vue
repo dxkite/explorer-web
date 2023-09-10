@@ -27,14 +27,18 @@ import Tag from './Tag.vue'
   }
 })
 export default class Panel extends Vue {
-  @Prop()
-  private config!: WebsiteConfig
-
-  public tagList: TagItem[] = []
   public isOpen = false
 
   get showTag () {
     return this.tagList.length > 0
+  }
+
+  get tagList () {
+    return this.$store.state.tagList || []
+  }
+
+  get config () {
+    return this.$store.state.config
   }
 
   private mounted () {
@@ -42,12 +46,11 @@ export default class Panel extends Vue {
   }
 
   private onClickTag (tag: TagItem) {
-    this.$emit('tagClick', tag)
+    this.$store.dispatch('updateTag', tag.name)
   }
 
   private async initTag () {
-    const tagList = await getTagList()
-    this.tagList = tagList
+    this.$store.dispatch('loadTags')
   }
 
   private onClickOpenClose () {

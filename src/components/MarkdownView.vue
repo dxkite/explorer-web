@@ -10,9 +10,10 @@ import { replaceMarkdownLink } from '@/src/util'
 
 @Component
 export default class MarkdownView extends Vue {
-  @Prop() private path!: string
+  get content () {
+    return this.$store.state.markdown.content
+  }
 
-  private content = ''
   private options = {
     linkAttributes: {
       attrs: {
@@ -41,16 +42,6 @@ export default class MarkdownView extends Vue {
       hAlign: 'left',
       viewer: true
     }
-  }
-
-  public mounted () {
-    this.loadPath()
-  }
-
-  @Watch('path')
-  private async loadPath () {
-    const raw = await getFileRawText(this.path)
-    this.content = replaceMarkdownLink(this.path, raw)
   }
 }
 </script>
