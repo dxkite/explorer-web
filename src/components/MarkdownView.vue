@@ -18,6 +18,9 @@ export default class MarkdownView extends Vue {
   }
 
   private options = {
+    markdownIt: {
+      linkify: true
+    },
     linkAttributes: {
       attrs: {
         target: '_blank',
