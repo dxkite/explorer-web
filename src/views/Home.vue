@@ -17,14 +17,18 @@
 </div>
 </template>
 <script lang="ts">
+import { defineAsyncComponent } from 'vue'
 import { Component, Vue, Watch } from 'vue-property-decorator'
-import FileList from '@/components/FileList.vue' // @ is an alias to /src
-import MarkdownView from '@/components/MarkdownView.vue'
+import FileList from '@/components/FileList.vue'
 import Footer from '@/components/Footer.vue'
 import Panel from '@/components/Panel.vue'
 import MetaView from '@/components/MetaView.vue'
 import PathView from '@/components/PathView.vue'
 import { RawLocation } from 'vue-router'
+
+const MarkdownView = defineAsyncComponent(() => {
+  return import('@/components/MarkdownView.vue')
+})
 
 @Component({
   components: {

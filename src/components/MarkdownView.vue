@@ -3,12 +3,15 @@
 </template>
 
 <script lang="ts">
-import { getFileRawText } from '@/src/api'
-import { Component, Prop, Ref, Vue, Watch } from 'vue-property-decorator'
+import { Component, Vue } from 'vue-property-decorator'
 import 'markdown-it-vue/dist/markdown-it-vue.css'
-import { replaceMarkdownLink } from '@/src/util'
+import MarkdownItVue from 'markdown-it-vue'
 
-@Component
+@Component({
+  components: {
+    MarkdownItVue
+  }
+})
 export default class MarkdownView extends Vue {
   get content () {
     return this.$store.state.markdown.content
