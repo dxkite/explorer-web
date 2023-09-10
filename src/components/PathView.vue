@@ -63,7 +63,8 @@ export default class PathView extends Vue {
 .path-view {
   display: flex;
   justify-items: center;
-  height: 24px;
+  min-height: 24px;
+  flex-wrap: wrap;
 
   .path-icon {
     width: 14px;
@@ -78,6 +79,8 @@ export default class PathView extends Vue {
     display: flex;
     align-items: center;
     cursor: pointer;
+    padding: 8px 0;
+    min-height: 24px;
   }
 }
 </style>
