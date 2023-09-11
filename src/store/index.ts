@@ -14,6 +14,7 @@ interface Data {
   list: FileMeta[];
   searchTag: string;
   search: string;
+  searchOpen: boolean;
   tagList: Tag[];
   listLoading: boolean,
   config: {
@@ -47,6 +48,7 @@ export default new Vuex.Store<Data>({
     search: '',
     tagList: [],
     listLoading: false,
+    searchOpen: false,
     config: {
       name: 'dxkite的网站',
       copyrightName: 'dxkite',
@@ -88,6 +90,9 @@ export default new Vuex.Store<Data>({
     },
     setListLoading (state, loading: boolean) {
       state.listLoading = loading
+    },
+    setSearchOpen (state, searchOpen: boolean) {
+      state.searchOpen = searchOpen
     },
     setMarkdown (state, { show = false, content } : { show: boolean, content: string }) {
       state.markdown.show = show

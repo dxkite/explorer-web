@@ -1,5 +1,5 @@
 <template>
-  <div class="file-explorer">
+  <div :class="['file-explorer', {'is-open-search': searchOpen }]">
     <SearchInput class="file-search" v-model="searchText" />
     <div class="file-list">
       <div class="filter-item" v-if="hasTag">
@@ -71,6 +71,10 @@ export default class FileList extends Vue {
 
   get listLoading () {
     return this.$store.state.listLoading
+  }
+
+  get searchOpen () {
+    return this.$store.state.searchOpen
   }
 
   private onClickPrevious () {
@@ -176,6 +180,19 @@ export default class FileList extends Vue {
 
     .file-item:hover, .file-item.is-active {
       background-color: #f8f8f8;
+    }
+  }
+}
+
+@media screen and (max-width: 991px) {
+  .file-explorer {
+    &.is-open-search {
+      .file-search {
+        display: block;
+      }
+    }
+    .file-search {
+      display: none;
     }
   }
 }

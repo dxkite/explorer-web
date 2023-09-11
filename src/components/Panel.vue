@@ -1,8 +1,13 @@
 <template>
   <div :class="['panel', {'is-open': isOpen}]">
-    <div class="website-info" @click="onClickOpenClose">
-      <div class="website-logo"><img src="@/assets/dxkite.png"/></div>
-      <div class="website-name">{{ config.name }}</div>
+    <div class="website-header">
+      <div class="website-info" @click="onClickOpenClose">
+        <div class="website-logo"><img src="@/assets/dxkite.png"/></div>
+        <div class="website-name">{{ config.name }}</div>
+      </div>
+      <div :class="['search-icon', {'is-open': searchOpen }]" @click="onClickSearch">
+        <img src="@/assets/search.svg"/>
+      </div>
     </div>
     <div class="tag-panel" v-if="showTag">
       <div class="tag-icon" @click="onClickOpenClose"><img src="@/assets/tag.svg"/></div>
@@ -41,6 +46,10 @@ export default class Panel extends Vue {
     return this.$store.state.config
   }
 
+  get searchOpen () {
+    return this.$store.state.searchOpen
+  }
+
   private mounted () {
     this.initTag()
   }
@@ -55,6 +64,10 @@ export default class Panel extends Vue {
 
   private onClickOpenClose () {
     this.isOpen = !this.isOpen
+  }
+
+  private onClickSearch () {
+    this.$store.commit('setSearchOpen', !this.searchOpen)
   }
 }
 </script>
