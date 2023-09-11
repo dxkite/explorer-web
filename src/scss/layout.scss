@@ -21,6 +21,7 @@
 
     .content-body {
       padding: 8px;
+      flex-grow: 1;
 
       &::-webkit-scrollbar {
         width: 4px;
