@@ -21,3 +21,13 @@ export const MarkdownRawExt = [
 export const TextViewExt = [
   'txt', 'cpp', 'c', 'js', 'yaml'
 ]
+
+export const ExtCodeMirrorMode: Record<string, string> = {
+  cpp: 'clike',
+  c: 'clike',
+  h: 'clike',
+  hpp: 'clike',
+  go: 'go',
+  js: 'javascript',
+  txt: 'shell'
+}

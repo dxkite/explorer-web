@@ -6,6 +6,7 @@ export interface FileMeta {
   name: string
   path: string
   modTime: string
+  ext?: string
   isDir: boolean
   readme?: string
   children?: FileMeta[]

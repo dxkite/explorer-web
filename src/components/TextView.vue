@@ -17,6 +17,17 @@ import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/darcula.css'
 import 'codemirror/addon/scroll/simplescrollbars'
 import 'codemirror/addon/scroll/simplescrollbars.css'
+import 'codemirror/mode/meta'
+import 'codemirror/mode/clike/clike'
+import 'codemirror/mode/javascript/javascript'
+import 'codemirror/mode/css/css'
+import 'codemirror/mode/lua/lua'
+import 'codemirror/mode/markdown/markdown'
+import 'codemirror/mode/python/python'
+import 'codemirror/mode/sql/sql'
+import 'codemirror/mode/shell/shell'
+
+import { ExtCodeMirrorMode } from '@/src/const'
 
 @Component({
   components: {
@@ -32,37 +43,27 @@ export default class TextView extends Vue {
     return this.$store.state.text
   }
 
-  private options = {
-    line: true,
-    tabSize: 2, // 制表符的宽度
-    indentUnit: 2, // 一个块应该缩进多少个空格（无论这在编辑语言中意味着什么）。默认值为 2。
-    firstLineNumber: 1, // 从哪个数字开始计算行数。默认值为 1。
-    readOnly: false, // 只读
-    theme: 'darcula',
-    scrollbarStyle: 'simple',
-    autorefresh: true,
-    smartIndent: true, // 上下文缩进
-    lineNumbers: true, // 是否显示行号
-    styleActiveLine: true, // 高亮选中行
-    viewportMargin: Infinity, // 处理高度自适应时搭配使用
-    showCursorWhenSelecting: true, // 当选择处于活动状态时是否应绘制游标
-    mode: 'javascript'
+  get options () {
+    return {
+      line: true,
+      tabSize: 2, // 制表符的宽度
+      indentUnit: 2, // 一个块应该缩进多少个空格（无论这在编辑语言中意味着什么）。默认值为 2。
+      firstLineNumber: 1, // 从哪个数字开始计算行数。默认值为 1。
+      readOnly: false, // 只读
+      scrollbarStyle: 'simple',
+      autorefresh: true,
+      smartIndent: true, // 上下文缩进
+      lineNumbers: true, // 是否显示行号
+      styleActiveLine: true, // 高亮选中行
+      viewportMargin: Infinity, // 处理高度自适应时搭配使用
+      showCursorWhenSelecting: true, // 当选择处于活动状态时是否应绘制游标
+      mode: this.mode
+    }
   }
 
-  private path = ''
-  private modTime = ''
-  private isDir = false
-  private downloadLink = ''
-
-  @Watch('meta')
-  private async loadMeta () {
-    if (this.meta === null) {
-      return
-    }
-    this.path = this.meta.path
-    this.modTime = this.meta.modTime
-    this.isDir = this.meta.isDir
-    this.downloadLink = await getFileRawLink(this.meta.path)
+  get mode () {
+    const ext = this.$store.state.pathMeta.ext || ''
+    return ExtCodeMirrorMode[ext] || 'shell'
   }
 }
 </script>
