@@ -1,4 +1,5 @@
 import { FileMeta, Tag, getFileMeta, getTagList, searchFileMeta, getFileRawText } from '@/src/api'
+import { TextViewExt } from '@/src/const'
 import { replaceMarkdownLink } from '@/src/util'
 import path from 'path'
 import Vue from 'vue'
@@ -25,10 +26,8 @@ interface Data {
     websitePoliceRecord: string;
     websitePoliceLink: string;
   },
-  markdown: {
-    show: boolean,
-    content: string,
-  }
+  markdown: string;
+  text: string;
 }
 
 interface RouteParams {
@@ -57,10 +56,8 @@ export default new Vuex.Store<Data>({
       websitePoliceRecord: '湘公网安备 43112602000222号',
       websitePoliceLink: 'http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=43112602000222'
     },
-    markdown: {
-      show: false,
-      content: ''
-    }
+    markdown: '',
+    text: ''
   },
   getters: {
     hasPreviousPath (state) {
@@ -94,9 +91,11 @@ export default new Vuex.Store<Data>({
     setSearchOpen (state, searchOpen: boolean) {
       state.searchOpen = searchOpen
     },
-    setMarkdown (state, { show = false, content } : { show: boolean, content: string }) {
-      state.markdown.show = show
-      state.markdown.content = content
+    setMarkdown (state, content: string) {
+      state.markdown = content
+    },
+    setText (state, content: string) {
+      state.text = content
     }
   },
   actions: {
@@ -184,16 +183,23 @@ export default new Vuex.Store<Data>({
     async loadMarkdown (context, markdownPath: string) {
       const raw = await getFileRawText(markdownPath)
       const content = replaceMarkdownLink(markdownPath, raw)
-      context.commit('setMarkdown', { show: true, content })
+      context.commit('setMarkdown', content)
+    },
+    async loadText (context, textPath: string) {
+      const raw = await getFileRawText(textPath)
+      context.commit('setText', raw)
     },
     async previewMeta (context, meta: FileMeta) {
       if (meta.isDir && meta.readme) {
         context.dispatch('loadMarkdown', meta.readme)
       } else {
-        if (meta.path.toLowerCase().endsWith('.md')) {
+        context.commit('setMarkdown', '')
+        context.commit('setText', '')
+        const ext = path.extname(meta.path.toLowerCase()).replace(/^\./, '')
+        if (['md'].includes(ext)) {
           context.dispatch('loadMarkdown', meta.path)
-        } else {
-          context.commit('setMarkdown', { show: false, content: '' })
+        } else if (TextViewExt.includes(ext)) {
+          context.dispatch('loadText', meta.path)
         }
       }
     }

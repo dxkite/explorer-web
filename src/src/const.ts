@@ -17,3 +17,7 @@ export const MarkdownRawExt = [
   'ico',
   ''
 ]
+
+export const TextViewExt = [
+  'txt', 'cpp', 'c', 'js', 'yaml'
+]

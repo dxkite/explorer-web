@@ -9,6 +9,7 @@
       </div>
       <div class="content-body">
         <MarkdownView class="markdown-view content-item" v-if="showMarkdown"/>
+        <TextView class="content-item" v-if="showText"/>
         <MetaView class="content-item"/>
       </div>
     </div>
@@ -30,10 +31,15 @@ const MarkdownView = defineAsyncComponent(() => {
   return import('@/components/MarkdownView.vue')
 })
 
+const TextView = defineAsyncComponent(() => {
+  return import('@/components/TextView.vue')
+})
+
 @Component({
   components: {
     FileList,
     MarkdownView,
+    TextView,
     Footer,
     Panel,
     MetaView,
@@ -54,7 +60,11 @@ export default class Home extends Vue {
   }
 
   get showMarkdown () {
-    return this.$store.state.markdown.show
+    return this.$store.state.markdown.length > 0
+  }
+
+  get showText () {
+    return this.$store.state.text.length > 0
   }
 
   public mounted () {

@@ -14,7 +14,7 @@ import MarkdownItVue from 'markdown-it-vue'
 })
 export default class MarkdownView extends Vue {
   get content () {
-    return this.$store.state.markdown.content
+    return this.$store.state.markdown
   }
 
   private options = {
