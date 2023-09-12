@@ -5,3 +5,15 @@ export const API = {
   meta: '/api/explore/meta',
   raw: '/api/explore/raw'
 }
+
+export const MarkdownRawExt = [
+  'jpg',
+  'jpeg',
+  'gif',
+  'png',
+  'svg',
+  'webp',
+  'bmp',
+  'ico',
+  ''
+]

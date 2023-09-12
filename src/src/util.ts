@@ -1,5 +1,5 @@
 import path from 'path'
-import { API } from './const'
+import { API, MarkdownRawExt } from './const'
 import router from '@/router'
 
 export const getPreviousPath = (name: string) => {
@@ -16,6 +16,7 @@ export const hasPreviousPath = (path: string) => {
 
 export const replaceMarkdownLink = (filepath: string, content: string) => {
   const dirname = path.dirname(filepath)
+
   return content.replaceAll(/(!?)\[([^\]]*?)\]\(([^)]+?)\)/g, (substr: string, img: string, name: string, link: string) => {
     // 链接直接调过不处理
     if (/^\w+:/.test(link.trim())) {
@@ -23,10 +24,13 @@ export const replaceMarkdownLink = (filepath: string, content: string) => {
     }
 
     const linkFull = encodeURIComponent(path.join(dirname, link))
-    let newUrl = `${API.raw}/${linkFull}`
-    if (/\.md/i.test(link)) {
-      const currentRoute = router.resolve({ name: 'Path', params: { path: linkFull } })
-      newUrl = currentRoute.href
+
+    const currentRoute = router.resolve({ name: 'Path', params: { path: linkFull } })
+    let newUrl = currentRoute.href
+
+    const ext = path.extname(link).toLowerCase().replace(/^\./, '')
+    if (MarkdownRawExt.includes(ext)) {
+      newUrl = `${API.raw}/${linkFull}`
     }
 
     const newLinkMark = `${img}[${name}](${newUrl})`
