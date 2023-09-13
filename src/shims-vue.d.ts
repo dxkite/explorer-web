@@ -4,3 +4,4 @@ declare module '*.vue' {
 }
 
 declare module 'vue-codemirror'
+declare module 'vue-dplayer'

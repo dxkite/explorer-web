@@ -31,3 +31,9 @@ export const ExtCodeMirrorMode: Record<string, string> = {
   js: 'javascript',
   txt: 'shell'
 }
+
+export const VideoExt = [
+  '3gpp', '3gp', 'ts', 'mp4', 'mpeg',
+  'mpg', 'mov', 'webm', 'flv', 'm4v',
+  'mng', 'asx', 'asf', 'wmv', 'avi'
+]

@@ -1,5 +1,5 @@
-import { FileMeta, Tag, getFileMeta, getTagList, searchFileMeta, getFileRawText } from '@/src/api'
-import { TextViewExt } from '@/src/const'
+import { FileMeta, Tag, getFileMeta, getTagList, searchFileMeta, getFileRawText, getFileRawLink } from '@/src/api'
+import { TextViewExt, VideoExt } from '@/src/const'
 import { replaceMarkdownLink } from '@/src/util'
 import path from 'path'
 import Vue from 'vue'
@@ -26,6 +26,7 @@ interface Data {
     websitePoliceRecord: string;
     websitePoliceLink: string;
   },
+  rawUrl: string;
   markdown: string;
   text: string;
 }
@@ -56,12 +57,16 @@ export default new Vuex.Store<Data>({
       websitePoliceRecord: '湘公网安备 43112602000222号',
       websitePoliceLink: 'http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=43112602000222'
     },
+    rawUrl: '',
     markdown: '',
     text: ''
   },
   getters: {
     hasPreviousPath (state) {
       return state.dirPath !== '/'
+    },
+    isVideo (state) {
+      return VideoExt.includes(state.pathMeta?.ext || '')
     }
   },
   mutations: {
@@ -96,6 +101,9 @@ export default new Vuex.Store<Data>({
     },
     setText (state, content: string) {
       state.text = content
+    },
+    setRawUrl (state, rawUrl: string) {
+      state.rawUrl = rawUrl
     }
   },
   actions: {
@@ -139,6 +147,10 @@ export default new Vuex.Store<Data>({
           const dirMeta = await getFileMeta(dirPath)
           context.commit('updateDir', dirMeta)
           context.commit('setListLoading', false)
+        }
+        if (VideoExt.includes(meta.ext || '')) {
+          const rawUrl = await getFileRawLink(meta.path)
+          context.commit('setRawUrl', rawUrl)
         }
       }
 

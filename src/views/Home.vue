@@ -10,6 +10,7 @@
       <div class="content-body">
         <MarkdownView class="markdown-view content-item" v-if="showMarkdown"/>
         <TextView class="content-item" v-if="showText"/>
+        <VideoView class="content-item" v-if="isVideo"/>
         <MetaView class="content-item"/>
       </div>
     </div>
@@ -35,6 +36,10 @@ const TextView = defineAsyncComponent(() => {
   return import('@/components/TextView.vue')
 })
 
+const VideoView = defineAsyncComponent(() => {
+  return import('@/components/VideoView.vue')
+})
+
 @Component({
   components: {
     FileList,
@@ -43,7 +48,8 @@ const TextView = defineAsyncComponent(() => {
     Footer,
     Panel,
     MetaView,
-    PathView
+    PathView,
+    VideoView
   }
 })
 export default class Home extends Vue {
@@ -65,6 +71,10 @@ export default class Home extends Vue {
 
   get showText () {
     return this.$store.state.text.length > 0
+  }
+
+  get isVideo () {
+    return this.$store.getters.isVideo
   }
 
   public mounted () {
