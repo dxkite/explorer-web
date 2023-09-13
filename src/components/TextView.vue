@@ -14,7 +14,7 @@ import { FileMeta, getFileRawLink } from '@/src/api'
 import { Component, Prop, Ref, Vue, Watch } from 'vue-property-decorator'
 import { codemirror } from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
-import 'codemirror/theme/darcula.css'
+import 'codemirror/theme/idea.css'
 import 'codemirror/addon/scroll/simplescrollbars'
 import 'codemirror/addon/scroll/simplescrollbars.css'
 import 'codemirror/mode/meta'
@@ -46,6 +46,7 @@ export default class TextView extends Vue {
   get options () {
     return {
       line: true,
+      theme: 'idea',
       tabSize: 2, // 制表符的宽度
       indentUnit: 2, // 一个块应该缩进多少个空格（无论这在编辑语言中意味着什么）。默认值为 2。
       firstLineNumber: 1, // 从哪个数字开始计算行数。默认值为 1。
@@ -55,7 +56,7 @@ export default class TextView extends Vue {
       smartIndent: true, // 上下文缩进
       lineNumbers: true, // 是否显示行号
       styleActiveLine: true, // 高亮选中行
-      viewportMargin: Infinity, // 处理高度自适应时搭配使用
+      viewportMargin: 1000, // 处理高度自适应时搭配使用
       showCursorWhenSelecting: true, // 当选择处于活动状态时是否应绘制游标
       mode: this.mode
     }
@@ -80,7 +81,7 @@ export default class TextView extends Vue {
   }
 
   .file-content {
-    padding: 8px;
+    padding: 4px;
   }
 }
 

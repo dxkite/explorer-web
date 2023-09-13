@@ -11,7 +11,7 @@ const routes: Array<RouteConfig> = [
     component: Home
   },
   {
-    path: '/p/:path(.*)',
+    path: '/src::path(.*)',
     name: 'Path',
     component: Home
   },
