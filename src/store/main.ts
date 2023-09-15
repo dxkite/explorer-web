@@ -1,6 +1,6 @@
-import { FileMeta, Tag, getFileMeta, getFileRawLink, getFileRawText, getTagList, searchFileMeta } from '@/ts/api';
-import { TextViewExt, VideoExt } from '@/ts/const';
-import { replaceMarkdownLink } from '@/ts/util';
+import { FileMeta, Tag, getFileMeta, getFileRawLink, getFileRawText, getTagList, searchFileMeta } from '@/src/api';
+import { TextViewExt, VideoExt } from '@/src/const';
+import { replaceMarkdownLink } from '@/src/util';
 import path from 'path';
 import { defineStore } from 'pinia'
 
