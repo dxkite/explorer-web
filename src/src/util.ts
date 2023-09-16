@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'path-browserify'
 import { API, MarkdownRawExt } from './const'
 import router from '@/router'
 

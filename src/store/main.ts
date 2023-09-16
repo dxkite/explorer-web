@@ -1,7 +1,7 @@
 import { FileMeta, Tag, getFileMeta, getFileRawLink, getFileRawText, getTagList, searchFileMeta } from '@/src/api';
 import { TextViewExt, VideoExt } from '@/src/const';
 import { replaceMarkdownLink } from '@/src/util';
-import path from 'path';
+import path from 'path-browserify';
 import { defineStore } from 'pinia'
 
 interface Data {
