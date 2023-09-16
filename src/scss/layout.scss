@@ -79,17 +79,14 @@
 
 .panel {
   width: 100%;
-  transition: .5s;
 
   &.is-open {
     width: 100%;
 
     .tag-panel {
       padding: 8px;
-      transition: .3s;
       display: block;
       opacity: 1;
-      transform: scale(1);
 
       .tag-icon {
         display: none;
@@ -130,7 +127,6 @@
       .website-name {
         font-size: 16px;
         padding: 8px 16px;
-        transition: .3s;
       }
     }
 
@@ -149,10 +145,8 @@
 
   .tag-panel {
     padding: 8px;
-    transition: .3s;
     display: none;
     opacity: 0;
-    transform: scale(0);
 
     .tag-icon {
       display: flex;
@@ -250,7 +244,6 @@
 
   .panel {
     width: 64px;
-    transition: .5s;
 
     &.is-open {
       width: 256px;
@@ -269,7 +262,6 @@
           }
 
           .website-name {
-            transform: scale(1);
             opacity: 1;
             display: block;
           }
@@ -280,19 +272,16 @@
         padding: 16px;
 
         .tag-icon {
-          transform: scale(0);
           opacity: 0;
           display: none;
         }
 
         .tag-title {
-          transform: scale(1);
           opacity: 1;
           display: block;
         }
 
         .tag-list {
-          transform: scale(1);
           opacity: 1;
           display: flex;
         }
@@ -321,13 +310,11 @@
         }
 
         .website-name {
-          transform: scale(0);
           opacity: 0;
           display: none;
           font-size: 18px;
           padding: 16px;
           opacity: 1;
-          transition: .3s;
         }
       }
 
