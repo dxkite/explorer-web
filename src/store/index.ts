@@ -1,4 +1,4 @@
-import { FileMeta, Tag, getFileMeta, getTagList, searchFileMeta, getFileRawText, getFileRawLink } from '@/src/api'
+import { FileMeta, Tag, getFileMeta, getTagList, searchFileMeta, getFileRawText, getFileRawLink, getRecentList } from '@/src/api'
 import { TextViewExt, VideoExt } from '@/src/const'
 import { replaceMarkdownLink } from '@/src/util'
 import path from 'path'
@@ -13,6 +13,7 @@ interface Data {
   dirPath: string;
   dirMeta: FileMeta | null;
   list: FileMeta[];
+  recentList: FileMeta[];
   searchTag: string;
   search: string;
   searchOpen: boolean;
@@ -44,6 +45,7 @@ export default new Vuex.Store<Data>({
     dirPath: '',
     dirMeta: null,
     list: [],
+    recentList: [],
     searchTag: '',
     search: '',
     tagList: [],
@@ -104,6 +106,9 @@ export default new Vuex.Store<Data>({
     },
     setRawUrl (state, rawUrl: string) {
       state.rawUrl = rawUrl
+    },
+    setRecentList (state, recentList: FileMeta[]) {
+      state.recentList = recentList
     }
   },
   actions: {
@@ -214,6 +219,10 @@ export default new Vuex.Store<Data>({
           context.dispatch('loadText', meta.path)
         }
       }
+    },
+    async loadRecent (context) {
+      const list = await getRecentList(10)
+      context.commit('setRecentList', list)
     }
   },
   modules: {

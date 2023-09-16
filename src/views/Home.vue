@@ -11,6 +11,7 @@
         <MarkdownView class="markdown-view content-item" v-if="showMarkdown"/>
         <TextView class="content-item" v-if="showText"/>
         <VideoView class="content-item" v-if="isVideo"/>
+        <RecentView class="content-item" v-if="showRecent"/>
         <MetaView class="content-item"/>
       </div>
     </div>
@@ -40,6 +41,10 @@ const VideoView = defineAsyncComponent(() => {
   return import('@/components/VideoView.vue')
 })
 
+const RecentView = defineAsyncComponent(() => {
+  return import('@/components/RecentView.vue')
+})
+
 @Component({
   components: {
     FileList,
@@ -49,7 +54,8 @@ const VideoView = defineAsyncComponent(() => {
     Panel,
     MetaView,
     PathView,
-    VideoView
+    VideoView,
+    RecentView
   }
 })
 export default class Home extends Vue {
@@ -73,6 +79,10 @@ export default class Home extends Vue {
     return this.$store.state.text.length > 0
   }
 
+  get showRecent () {
+    return this.$store.state.recentList.length > 0 && this.$store.getters.hasPreviousPath === false
+  }
+
   get isVideo () {
     return this.$store.getters.isVideo
   }
@@ -82,6 +92,7 @@ export default class Home extends Vue {
     this.$store.dispatch('load', { path, search, tag })
     const name = this.$store.state.config.name
     this.setTitle(name)
+    this.$store.dispatch('loadRecent')
   }
 
   @Watch('path')
