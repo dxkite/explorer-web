@@ -10,8 +10,8 @@
         <div class="content-body">
           <!-- <MarkdownView class="markdown-view content-item" v-if="showMarkdown"/>
           <TextView class="content-item" v-if="showText"/>
-          <VideoView class="content-item" v-if="isVideo"/>
-          <MetaView class="content-item"/> -->
+          <VideoView class="content-item" v-if="isVideo"/>-->
+          <MetaView class="content-item"/>
         </div>
       </div>
     </div>
@@ -23,7 +23,7 @@ import { computed, defineAsyncComponent, onMounted, watch } from 'vue'
 import FileList from '@/components/FileList.vue'
 import Footer from '@/components/FooterView.vue'
 import Panel from '@/components/PanelView.vue'
-// import MetaView from '@/components/MetaView.vue'
+import MetaView from '@/components/MetaView.vue'
 import PathView from '@/components/PathView.vue'
 import { useMainStore } from '@/store/main';
 import router from '@/router'
