@@ -1,4 +1,4 @@
-import { FileMeta, Tag, getFileMeta, getFileRawLink, getFileRawText, getTagList, searchFileMeta } from '@/src/api';
+import { FileMeta, Tag, getFileMeta, getFileRawLink, getFileRawText, getRecentList, getTagList, searchFileMeta } from '@/src/api';
 import { TextViewExt, VideoExt } from '@/src/const';
 import { replaceMarkdownLink } from '@/src/util';
 import path from 'path-browserify';
@@ -10,6 +10,7 @@ interface Data {
   dirPath: string;
   dirMeta: FileMeta | null;
   list: FileMeta[];
+  recentList: FileMeta[];
   searchTag: string;
   searchText: string;
   searchOpen: boolean;
@@ -43,6 +44,7 @@ export const useMainStore = defineStore({
     dirPath: '',
     dirMeta: null,
     list: [],
+    recentList: [],
     searchTag: '',
     searchText: '',
     tagList: [],
@@ -209,6 +211,10 @@ export const useMainStore = defineStore({
           this.loadText(meta.path)
         }
       }
+    },
+    async loadRecent () {
+      const list = await getRecentList(10);
+      this.recentList = list;
     }
   }
 })

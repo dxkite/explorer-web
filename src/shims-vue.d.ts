@@ -7,3 +7,4 @@ declare module '*.vue' {
 
 declare module '@kangc/v-md-editor/lib/*';
 declare module '@uiw/codemirror-theme-vscode';
+declare module 'dplayer';

@@ -9,8 +9,9 @@
         </div>
         <div class="content-body">
           <MarkdownView class="markdown-view content-item" v-if="showMarkdown" />
-          <TextView class="content-item" v-if="showText"/>
-          <VideoView class="content-item" v-if="isVideo"/>
+          <TextView class="content-item" v-if="showText" />
+          <VideoView class="content-item" v-if="isVideo" />
+          <RecentView class="content-item" v-if="showRecent"/>
           <MetaView class="content-item" />
         </div>
       </div>
@@ -32,6 +33,7 @@ import { RouteLocationRaw } from 'vue-router'
 const MarkdownView = defineAsyncComponent(() => import('@/components/MarkdownView.vue'));
 const TextView = defineAsyncComponent(() => import('@/components/TextView.vue'));
 const VideoView = defineAsyncComponent(() => import('@/components/VideoView.vue'));
+const RecentView = defineAsyncComponent(() => import('@/components/RecentView.vue'))
 
 const currentRoute = router.currentRoute
 
@@ -47,6 +49,9 @@ const path = computed(() => mainStore.path)
 const showMarkdown = computed(() => mainStore.markdown.length > 0)
 const showText = computed(() => mainStore.text.length > 0)
 const isVideo = computed(() => mainStore.isVideo)
+const showRecent = computed(() =>
+  mainStore.recentList.length > 0 && mainStore.hasPreviousPath === false
+);
 
 const currentRouteParams = computed(() => {
   const path = currentRoute.value.params.path as string || '/'
@@ -73,6 +78,7 @@ onMounted(() => {
   const param = currentRouteParams.value
   mainStore.load(param)
   setTitle(mainStore.config.name)
+  mainStore.loadRecent()
 })
 
 watch([tag, search, path], () => {
