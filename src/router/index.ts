@@ -11,12 +11,12 @@ const routes: Array<RouteConfig> = [
     component: Home
   },
   {
-    path: '/src::path(.*)',
+    path: '/src\\::path(.*)',
     name: 'Path',
     component: Home
   },
   {
-    path: '*',
+    path: '/:path(.*)',
     name: 'NotFound',
     component: Home
   }

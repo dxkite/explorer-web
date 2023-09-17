@@ -105,6 +105,12 @@ export default class Home extends Vue {
     this.pushRoute()
   }
 
+  @Watch('$route')
+  private onRouteChange () {
+    const { path, search, tag } = this.getCurrentRoute()
+    this.$store.dispatch('load', { path, search, tag })
+  }
+
   get isRouteChange () {
     const { path, search, tag } = this.getCurrentRoute()
     if (path !== this.path) {
