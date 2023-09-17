@@ -8,7 +8,7 @@
           <PathView />
         </div>
         <div class="content-body">
-          <MarkdownView class="markdown-view content-item" v-if="showMarkdown" />
+          <MarkdownView class="content-item" v-if="showMarkdown" />
           <TextView class="content-item" v-if="showText" />
           <VideoView class="content-item" v-if="isVideo" />
           <RecentView class="content-item" v-if="showRecent"/>

@@ -37,11 +37,6 @@
     }
   }
 
-  .markdown-view {
-    padding: 0px;
-    background-color: #ffffff;
-  }
-
   .content-item+.content-item {
     margin-top: 8px;
   }
@@ -201,11 +196,6 @@
         overflow-y: auto;
         flex-grow: 1;
       }
-    }
-
-    .markdown-view {
-      padding: 24px;
-      background-color: #ffffff;
     }
 
     .content-item+.content-item {
