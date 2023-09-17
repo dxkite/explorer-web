@@ -88,6 +88,11 @@ watch([tag, search, path], () => {
   pushRoute();
 })
 
+watch(currentRouteParams, () => {
+  const param = currentRouteParams.value
+  mainStore.load(param)
+})
+
 const pushRoute = () => {
   const location: RouteLocationRaw = {
     name: 'Path',
