@@ -9,4 +9,11 @@ module.exports = defineConfig({
       }
     }
   },
+  chainWebpack: config => {
+    if (process.env.WEBPACK_ANALYZER === 'true') {
+      // 配置包分析器
+      config.plugin('webpack-bundle-analyzer')
+        .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
+    }
+  }
 })
