@@ -9,6 +9,7 @@ export interface FileMeta {
   ext?: string
   isDir: boolean
   readme?: string
+  rawUrl?: string
   children?: FileMeta[]
 }
 

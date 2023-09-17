@@ -10,8 +10,7 @@
         <div class="content-body">
           <MarkdownView class="markdown-view content-item" v-if="showMarkdown" />
           <TextView class="content-item" v-if="showText"/>
-          <!-- 
-          <VideoView class="content-item" v-if="isVideo"/>-->
+          <VideoView class="content-item" v-if="isVideo"/>
           <MetaView class="content-item" />
         </div>
       </div>
@@ -30,8 +29,9 @@ import { useMainStore } from '@/store/main';
 import router from '@/router'
 import { RouteLocationRaw } from 'vue-router'
 
-const MarkdownView = defineAsyncComponent(() => import('@/components/MarkdownView.vue'))
-const TextView = defineAsyncComponent(() => import('@/components/TextView.vue'))
+const MarkdownView = defineAsyncComponent(() => import('@/components/MarkdownView.vue'));
+const TextView = defineAsyncComponent(() => import('@/components/TextView.vue'));
+const VideoView = defineAsyncComponent(() => import('@/components/VideoView.vue'));
 
 const currentRoute = router.currentRoute
 
@@ -46,6 +46,7 @@ const search = computed(() => mainStore.searchText)
 const path = computed(() => mainStore.path)
 const showMarkdown = computed(() => mainStore.markdown.length > 0)
 const showText = computed(() => mainStore.text.length > 0)
+const isVideo = computed(() => mainStore.isVideo)
 
 const currentRouteParams = computed(() => {
   const path = currentRoute.value.params.path as string || '/'
