@@ -8,10 +8,11 @@
           <PathView />
         </div>
         <div class="content-body">
-          <!-- <MarkdownView class="markdown-view content-item" v-if="showMarkdown"/>
+          <MarkdownView class="markdown-view content-item" v-if="showMarkdown" />
+          <!-- 
           <TextView class="content-item" v-if="showText"/>
           <VideoView class="content-item" v-if="isVideo"/>-->
-          <MetaView class="content-item"/>
+          <MetaView class="content-item" />
         </div>
       </div>
     </div>
@@ -29,6 +30,8 @@ import { useMainStore } from '@/store/main';
 import router from '@/router'
 import { RouteLocation, RouteLocationRaw } from 'vue-router'
 
+const MarkdownView = defineAsyncComponent(() => import('@/components/MarkdownView.vue'))
+
 const currentRoute = router.currentRoute
 
 const mainStore = useMainStore();
@@ -40,6 +43,7 @@ const setTitle = (title: string) => {
 const tag = computed(() => mainStore.searchTag)
 const search = computed(() => mainStore.searchText)
 const path = computed(() => mainStore.path)
+const showMarkdown = computed(() => mainStore.markdown.length > 0)
 
 const currentRouteParams = computed(() => {
   const path = currentRoute.value.params.path as string || '/'
