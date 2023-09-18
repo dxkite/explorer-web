@@ -19,7 +19,7 @@
 import { Codemirror } from 'vue-codemirror'
 import { LanguageSupport } from '@codemirror/language';
 import { vscodeDark } from '@uiw/codemirror-theme-vscode';
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { useMainStore } from '@/store/main';
 import { cpp } from '@codemirror/lang-cpp';
 import { markdown } from '@codemirror/lang-markdown';

@@ -19,7 +19,7 @@
 </template>
   
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed } from 'vue';
 import { useMainStore } from '@/store/main';
 import { FileMeta } from '@/src/api';
 const mainStore = useMainStore();
