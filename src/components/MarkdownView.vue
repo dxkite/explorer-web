@@ -17,6 +17,8 @@ import 'prismjs/components/prism-python';
 import 'prismjs/components/prism-go';
 import 'prismjs/components/prism-java';
 import 'prismjs/components/prism-javascript';
+import 'prismjs/components/prism-php';
+import 'prismjs/components/prism-markup-templating'
 
 import createEmojiPlugin from '@kangc/v-md-editor/lib/plugins/emoji/index';
 import '@kangc/v-md-editor/lib/plugins/emoji/emoji.css';
