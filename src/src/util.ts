@@ -17,7 +17,7 @@ export const hasPreviousPath = (path: string) => {
 export const replaceMarkdownLink = (filepath: string, content: string) => {
   const dirname = path.dirname(filepath)
 
-  return content.replaceAll(/(!?)\[([^\]]*?)\]\(([^)]+?)\)/g, (substr: string, img: string, name: string, link: string) => {
+  return content.replace(/(!?)\[([^\]]*?)\]\(([^)]+?)\)/g, (substr: string, img: string, name: string, link: string) => {
     // 链接直接调过不处理
     if (/^\w+:/.test(link.trim())) {
       return substr
