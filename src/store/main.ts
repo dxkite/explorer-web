@@ -1,4 +1,4 @@
-import { FileMeta, Tag, getFileMeta, getFileRawLink, getFileRawText, getRecentList, getTagList, searchFileMeta } from '@/src/api';
+import { FileMeta, Tag, getFileMeta, getFileRawText, getRecentList, getTagList, searchFileMeta } from '@/src/api';
 import { TextViewExt, VideoExt } from '@/src/const';
 import { replaceMarkdownLink } from '@/src/util';
 import path from 'path-browserify';
@@ -148,7 +148,7 @@ export const useMainStore = defineStore({
           this.setListLoading(false)
         }
         if (VideoExt.includes(meta.ext || '')) {
-          const rawUrl = await getFileRawLink(meta.path)
+          const rawUrl = meta.rawUrl || ''
           this.setRawUrl(rawUrl)
         }
       }
