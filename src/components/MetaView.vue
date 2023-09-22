@@ -14,7 +14,6 @@
 </template>
 
 <script setup lang="ts">
-import { getFileRawLink } from '@/src/api'
 
 import { useMainStore } from '@/store/main';
 import { computed, watch, ref } from 'vue';
@@ -27,7 +26,7 @@ const downloadLink = ref('');
 
 watch(meta, async () => {
   if (meta.value) {
-    downloadLink.value= await getFileRawLink(meta.value.path)
+    downloadLink.value= meta.value.rawUrl || ''
   }
 })
 </script>
