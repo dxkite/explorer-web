@@ -29,6 +29,7 @@ import PathView from '@/components/PathView.vue'
 import { useMainStore } from '@/store/main';
 import router from '@/router'
 import { RouteLocationRaw } from 'vue-router'
+import { ConnectEvent, EventMessage, EventTypeClientCount } from '@/src/websocket'
 
 const MarkdownView = defineAsyncComponent(() => import('@/components/MarkdownView.vue'));
 const TextView = defineAsyncComponent(() => import('@/components/TextView.vue'));
@@ -79,6 +80,7 @@ onMounted(() => {
   mainStore.load(param)
   setTitle(mainStore.config.name)
   mainStore.loadRecent()
+  connectWebEvent()
 })
 
 watch([tag, search, path], () => {
@@ -114,6 +116,32 @@ const pushRoute = () => {
 
   const name = mainStore.config.name;
   setTitle([name, path.value].join(' - '));
+}
+
+
+const connectWebEvent = () => {
+  const socket = ConnectEvent();
+  if (socket == null) {
+    return;
+  }
+  socket.addEventListener('open', () => {
+    mainStore.setWebEventStatus('online')
+    console.log('websocket open')
+  })
+  socket.addEventListener('close', (e) => {
+    mainStore.setWebEventStatus('offline')
+    console.log('websocket close', e)
+  })
+  socket.addEventListener('message', (e: { data: string }) => {
+    const data = JSON.parse(e.data)
+    if (data) {
+      const val = data as EventMessage
+      console.log(val)
+      if (val.type === EventTypeClientCount) {
+        mainStore.setClientCount(val.data)
+      }
+    }
+  })
 }
 </script>
   

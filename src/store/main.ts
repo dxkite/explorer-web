@@ -4,6 +4,8 @@ import { replaceMarkdownLink } from '@/src/util';
 import path from 'path-browserify';
 import { defineStore } from 'pinia'
 
+type WebEventStatus = 'online' | 'offline' | 'unknown'
+
 interface Data {
   path: string;
   pathMeta: FileMeta | null;
@@ -27,6 +29,8 @@ interface Data {
   rawUrl: string;
   markdown: string;
   text: string;
+  webEventStatus: WebEventStatus;
+  clientCount: string;
 }
 
 interface RouteParams {
@@ -60,7 +64,9 @@ export const useMainStore = defineStore({
     },
     rawUrl: '',
     markdown: '',
-    text: ''
+    text: '',
+    webEventStatus: 'unknown',
+    clientCount: '0',
   }),
   getters: {
     hasPreviousPath(): boolean {
@@ -215,6 +221,12 @@ export const useMainStore = defineStore({
     async loadRecent () {
       const list = await getRecentList(10);
       this.recentList = list;
+    },
+    setWebEventStatus(status: WebEventStatus) {
+      this.webEventStatus = status
+    },
+    setClientCount(c: string) {
+      this.clientCount = c
     }
   }
 })

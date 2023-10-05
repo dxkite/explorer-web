@@ -6,6 +6,8 @@ export const API = {
   raw: '/api/explore/raw'
 }
 
+export const WebSocketEvent = '/api/websocket/client'
+
 export const MarkdownRawExt = [
   'jpg',
   'jpeg',

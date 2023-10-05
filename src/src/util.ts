@@ -39,3 +39,10 @@ export const replaceMarkdownLink = (filepath: string, content: string) => {
     return newLinkMark
   })
 }
+
+export const createWebsocketLink = (path: string) => {
+  const host = window.location.host;
+  const wss = window.location.protocol === 'https';
+  const protocol = wss ? 'wss' : 'ws';
+  return `${protocol}://${host + path}`
+}

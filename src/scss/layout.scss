@@ -212,6 +212,10 @@
     align-items: center;
     justify-content: center;
 
+    .footer-item {
+      cursor: pointer;
+    }
+
     .website-record,
     .police-record {
       text-decoration: none;
