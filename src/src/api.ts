@@ -40,15 +40,23 @@ export interface Tag {
 
 export interface WebsiteConfig {
   name: string
+  logo: string
   copyrightName: string
   websiteRecord: string
   websiteRecordLink: string
   websitePoliceRecord: string
   websitePoliceLink: string
+  textViewExt: string[]
+  videoViewExt: string[]
+  markdownRawExt: string[]
 }
 
 export const getTagList = (): Promise<Tag[]> => {
   return instance.get(API.tags).then((val) => toCamel(val.data))
+}
+
+export const getThemeConfig = (): Promise<WebsiteConfig> => {
+  return instance.get(API.config).then((val) => toCamel(val.data))
 }
 
 export const getFileMeta = (path: string): Promise<FileMeta> => {

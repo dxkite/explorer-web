@@ -1,5 +1,5 @@
 import path from 'path-browserify'
-import { API, MarkdownRawExt } from './const'
+import { API } from './const'
 import router from '@/router'
 
 export const getPreviousPath = (name: string) => {
@@ -14,7 +14,7 @@ export const hasPreviousPath = (path: string) => {
   return path !== '/'
 }
 
-export const replaceMarkdownLink = (filepath: string, content: string) => {
+export const replaceMarkdownLink = (filepath: string, content: string, rawExt: string[]) => {
   const dirname = path.dirname(filepath)
 
   return content.replace(/(!?)\[([^\]]*?)\]\(([^)]+?)\)/g, (substr: string, img: string, name: string, link: string) => {
@@ -29,7 +29,7 @@ export const replaceMarkdownLink = (filepath: string, content: string) => {
     let newUrl = currentRoute.href
 
     const ext = path.extname(link).toLowerCase().replace(/^\./, '')
-    if (MarkdownRawExt.includes(ext)) {
+    if (rawExt.includes(ext)) {
       newUrl = `${API.raw}/${linkFull}`
     }
 

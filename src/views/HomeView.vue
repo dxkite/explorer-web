@@ -78,6 +78,7 @@ const isRouteChange = computed(() => {
 onMounted(() => {
   const param = currentRouteParams.value
   mainStore.load(param)
+  boot()
   setTitle(mainStore.config.name)
   mainStore.loadRecent()
   connectWebEvent()
@@ -143,6 +144,11 @@ const connectWebEvent = () => {
     }
   })
 }
+
+const boot = () => {
+  mainStore.loadThemeConfig()
+}
+
 </script>
   
 <style lang="scss" scoped>

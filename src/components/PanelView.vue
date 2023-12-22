@@ -2,7 +2,7 @@
   <div :class="['panel', {'is-open': isOpen}]">
     <div class="website-header">
       <div class="website-info" @click="onClickOpenClose">
-        <div class="website-logo"><img src="@/assets/dxkite.png"/></div>
+        <div class="website-logo"><img :src="config.logo"/></div>
         <div class="website-name">{{ config.name }}</div>
       </div>
       <div :class="['search-icon', {'is-open': searchOpen }]" @click="onClickSearch">

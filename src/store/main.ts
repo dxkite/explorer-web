@@ -1,5 +1,4 @@
-import { FileMeta, Tag, getFileMeta, getFileRawText, getRecentList, getTagList, searchFileMeta } from '@/src/api';
-import { TextViewExt, VideoExt } from '@/src/const';
+import { FileMeta, Tag, WebsiteConfig, getFileMeta, getFileRawText, getRecentList, getTagList, getThemeConfig, searchFileMeta } from '@/src/api';
 import { replaceMarkdownLink } from '@/src/util';
 import path from 'path-browserify';
 import { defineStore } from 'pinia'
@@ -18,14 +17,7 @@ interface Data {
   searchOpen: boolean;
   tagList: Tag[];
   listLoading: boolean,
-  config: {
-    name: string;
-    copyrightName: string;
-    websiteRecord: string;
-    websiteRecordLink: string;
-    websitePoliceRecord: string;
-    websitePoliceLink: string;
-  },
+  config: WebsiteConfig,
   rawUrl: string;
   markdown: string;
   text: string;
@@ -55,12 +47,30 @@ export const useMainStore = defineStore({
     listLoading: false,
     searchOpen: false,
     config: {
-      name: 'dxkite的网站',
+      name: 'Explore Me',
+      logo: '/dxkite.png',
       copyrightName: 'dxkite',
-      websiteRecord: '湘ICP备20002416号-1',
-      websiteRecordLink: 'https://beian.miit.gov.cn/',
-      websitePoliceRecord: '湘公网安备 43112602000222号',
-      websitePoliceLink: 'http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=43112602000222'
+      websiteRecord: '',
+      websiteRecordLink: '',
+      websitePoliceRecord: '',
+      websitePoliceLink: '',
+      textViewExt: ['txt', 'cpp', 'c', 'js', 'yaml'],
+      videoViewExt: [
+        '3gpp', '3gp', 'ts', 'mp4', 'mpeg',
+        'mpg', 'mov', 'webm', 'flv', 'm4v',
+        'mng', 'asx', 'asf', 'wmv', 'avi'
+      ],
+      markdownRawExt: [
+        'jpg',
+        'jpeg',
+        'gif',
+        'png',
+        'svg',
+        'webp',
+        'bmp',
+        'ico',
+        ''
+      ],
     },
     rawUrl: '',
     markdown: '',
@@ -73,7 +83,7 @@ export const useMainStore = defineStore({
       return this.dirPath !== '/'
     },
     isVideo(): boolean {
-      return VideoExt.includes(this.pathMeta?.ext || '')
+      return this.config.videoViewExt.includes(this.pathMeta?.ext || '')
     }
   },
   actions: {
@@ -153,7 +163,7 @@ export const useMainStore = defineStore({
           this.updateDir(dirMeta)
           this.setListLoading(false)
         }
-        if (VideoExt.includes(meta.ext || '')) {
+        if (this.config.videoViewExt?.includes(meta.ext || '')) {
           const rawUrl = meta.rawUrl || ''
           this.setRawUrl(rawUrl)
         }
@@ -197,7 +207,7 @@ export const useMainStore = defineStore({
     },
     async loadMarkdown(markdownPath: string) {
       const raw = await getFileRawText(markdownPath)
-      const content = replaceMarkdownLink(markdownPath, raw)
+      const content = replaceMarkdownLink(markdownPath, raw, this.config.markdownRawExt ?? [])
       this.setMarkdown(content)
     },
     async loadText(textPath: string) {
@@ -213,7 +223,7 @@ export const useMainStore = defineStore({
         const ext = path.extname(meta.path.toLowerCase()).replace(/^\./, '')
         if (['md'].includes(ext)) {
           this.loadMarkdown(meta.path)
-        } else if (TextViewExt.includes(ext)) {
+        } else if (this.config.textViewExt.includes(ext)) {
           this.loadText(meta.path)
         }
       }
@@ -227,6 +237,10 @@ export const useMainStore = defineStore({
     },
     setClientCount(c: string) {
       this.clientCount = c
+    },
+    async loadThemeConfig() {
+      const config = await getThemeConfig()
+      this.config = { ...this.config, ...config}
     }
   }
 })
