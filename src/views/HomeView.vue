@@ -79,7 +79,6 @@ onMounted(() => {
   const param = currentRouteParams.value
   mainStore.load(param)
   boot()
-  setTitle(mainStore.config.name)
   mainStore.loadRecent()
   connectWebEvent()
 })
@@ -145,8 +144,9 @@ const connectWebEvent = () => {
   })
 }
 
-const boot = () => {
-  mainStore.loadThemeConfig()
+const boot = async () => {
+  await mainStore.loadThemeConfig()
+  setTitle(mainStore.config.name)
 }
 
 </script>
