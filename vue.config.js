@@ -1,7 +1,17 @@
 const { defineConfig } = require('@vue/cli-service')
+
+let outputDir = './dist'
+const outputParam = process.argv.find(v => v.match(/output/))
+if (outputParam) {
+  outputDir = outputParam.replace(/^--output=(.+)$/, '$1')
+}
+
+console.log('output', outputDir, outputParam, process.argv)
+
 module.exports = defineConfig({
   transpileDependencies: true,
   productionSourceMap: process.env.SOURCE_MAP === 'false' ? false : true,
+  outputDir: outputDir,
   devServer: {
     proxy: {
       '/api': {
