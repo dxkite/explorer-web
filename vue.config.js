@@ -1,10 +1,11 @@
 const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   transpileDependencies: true,
+  productionSourceMap: process.env.SOURCE_MAP === 'false' ? false : true,
   devServer: {
     proxy: {
       '/api': {
-        target: 'http://127.0.0.1:8080/', // 真实请求UR
+        target: 'http://127.0.0.1:80/', // 真实请求UR
         changeOrigin: true, // 允许跨域
       }
     }
