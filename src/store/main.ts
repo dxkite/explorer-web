@@ -48,7 +48,7 @@ export const useMainStore = defineStore({
     searchOpen: false,
     config: {
       name: 'Explore Me',
-      logo: '/dxkite.png',
+      logo: '/logo.png',
       copyrightName: 'dxkite',
       websiteRecord: '',
       websiteRecordLink: '',
