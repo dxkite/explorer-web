@@ -114,8 +114,8 @@ const pushRoute = () => {
   console.log('updateRoute', location);
   router.push(location);
 
-  const name = mainStore.config.name;
-  setTitle([name, path.value].join(' - '));
+  // const name = mainStore.config.name;
+  // setTitle([name, path.value].join(' - '));
 }
 
 
